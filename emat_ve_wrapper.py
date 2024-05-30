@@ -115,7 +115,8 @@ class VEModel(FilesCoreModel):
 		# Create parameter address to indicate directory in which the scenario files are stored
 
 		# Create a scenario input directory dictionary
-		self.scenario_input_dirs = {parameter.name:parameter.address for parameter in self.scope.get_parameters()} 
+		scenario_dir = self.config['scenario_dir']
+		self.scenario_input_dirs = {parameter.name:os.path.join(scenario_dir, parameter.address) for parameter in self.scope.get_parameters()} 
 
 		# Ensuring R Exe path is in env.
 		os.environ['path'] = join_norm(self.config['r_executable'])+';'+os.environ['path']

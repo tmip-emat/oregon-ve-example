@@ -1,6 +1,7 @@
 model_archive: ./VisionEval-Archive
 model_type: VE-State
 model_variant: odot-otp
+scenario_dir: OTP
 # Future year to run the scenarios on
 model_year: 2050
 # Base model to be loaded to run future year

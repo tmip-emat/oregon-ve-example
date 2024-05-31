@@ -1,17 +1,19 @@
 # Script that extracts output from VE-State
 
 library(visioneval)
+library(data.table)
 ematmodel <- openModel(getwd())
-ematmodelresults <- ematmodel$results()$Results[[ematmodel$modelName]]
+ematmodelresults <- ematmodel$results()
+ModelName <- ematmodel$modelName
 
-DatastoreName <- file.path(ematmodelresults$resultsPath, ematmodel$setting("DatastoreName"))
+DatastoreName <- file.path(ematmodelresults$Results[[ModelName]]$resultsPath, ematmodel$setting("DatastoreName"))
 DatastoreType <- ematmodel$setting("DatastoreType")
-Ma <- unique(ematmodelresults$ModelState()$Geo$Marea)
-Az <- unique(ematmodelresults$ModelState()$Geo$Azone)
+Ma <- unique(ematmodelresults$Results[[ModelName]]$ModelState()$Geo$Marea)
+Az <- unique(ematmodelresults$Results[[ModelName]]$ModelState()$Geo$Azone)
 Years <- ematmodel$RunParam_ls$Years
 
 # Create an output directory if one doesn't exist
-output_path <- file.path(ematmodelresults$resultsPath, "output")
+output_path <- file.path(ematmodelresults$Results[[ModelName]]$resultsPath, "output")
 if(!dir.exists(output_path)){
   dir.create(output_path)
 }
@@ -4896,7 +4898,7 @@ calcStateValidationMeasures <-
       #Annual vehicle ownership taxes
       #------------------------------
       VehOwnTax <- summarizeDatasets(
-        Expr = "sum(OwnTaxCost, na.rm=TRUE)",
+        Expr = "sum(OwnTaxCost)",
         Units = c(
           OwnTaxCost = "USD"
         ),
@@ -5381,3 +5383,55 @@ write.csv(calcStateValidationMeasures(Years, BaseYear,
                                       DstoreLocs_ = DatastoreName, DstoreType = DatastoreType),
           row.names = FALSE,
           file = file.path(output_path, "state_validation_measures.csv"))
+
+
+ematmodelresults$find(Group=ematmodel$setting("Years"),Table = c("Household", "Vehicle"), select = TRUE)
+output_ls <- ematmodelresults$extract(saveTo=FALSE)
+data_names <- names(output_ls)
+hh_name <- grep("Household", data_names, value = TRUE)
+ve_name <- grep("Vehicle", data_names, value = TRUE)
+
+
+hh_dt <- data.table(output_ls[[hh_name]])
+ve_dt <- data.table(output_ls[[ve_name]])
+
+outputenv <- new.env()
+outputfile <- file.path(output_path, "output_measures.csv")
+
+ve_dt[hh_dt,Dvmt:=DvmtProp*i.Dvmt,on=.(HhId)]
+ve_dt[hh_dt,L5DrvLessDvmtProp:=i.AVLvl5DvmtAdjProp,on=.(HhId)]
+ve_dt[,ElecDvmt:=ElecDvmtProp*Dvmt]
+ve_dt[Powertrain!='BEV',ElecDvmt:=0]
+marea_dt <- ve_dt[Marea!='None',.(Dvmt=sum(Dvmt),ElecDvmt=sum(ElecDvmt)),.(Marea)]
+marea_dt[,ElecDvmtProp:=ElecDvmt/Dvmt]
+outputenv$TotalDvmtVehOwned <- ve_dt[VehicleAccess=='Own',sum(Dvmt)]
+outputenv$TotalElecDvmtVehOwned <- ve_dt[VehicleAccess=='Own',sum(ElecDvmt)]
+outputenv$ElecDvmtProp <- outputenv$TotalElecDvmtVehOwned/outputenv$TotalDvmtVehOwned
+for(ma_ in marea_dt[,Marea]){{
+	outputenv[[paste0(ma_,'_', 'VehDvmt')]] <- marea_dt[Marea == ma_, Dvmt]
+	outputenv[[paste0(ma_,'_', 'VehElecDvmt')]] <- marea_dt[Marea == ma_, ElecDvmt]
+	outputenv[[paste0(ma_,'_', 'VehElecDvmtProp')]] <- marea_dt[Marea == ma_, ElecDvmtProp]
+}}
+marea_dt <- hh_dt[Marea!='None',.(NumHh=.N, NumHhMixUse=sum(IsUrbanMixNbrhd)),keyby=.(Marea)]
+marea_dt[,MixUseProp:=NumHhMixUse/NumHh]
+for(ma_ in marea_dt[,Marea]){{
+	outputenv[[paste0(ma_,'_', 'NumHh')]] <- marea_dt[Marea == ma_, NumHh]
+	outputenv[[paste0(ma_,'_', 'NumHhMixUse')]] <- marea_dt[Marea == ma_, NumHhMixUse]
+	outputenv[[paste0(ma_,'_', 'MixUseProp')]] <- marea_dt[Marea == ma_, MixUseProp]
+}}
+outputenv$RegionHHMPGe <- ve_dt[Powertrain=='BEV', mean(MPGe, na.rm=TRUE)]
+outputenv$HhDvmt <- ve_dt[VehicleAccess=='Own', sum(Dvmt)]
+outputenv$L3HhDvmt <- ve_dt[AVLvl=='L3' & VehicleAccess=='Own', sum(Dvmt)]
+outputenv$L5HhDvmt <- ve_dt[AVLvl=='L5' & VehicleAccess=='Own', sum(Dvmt)]
+outputenv$L3L5HhDvmt <- outputenv$L3HhDvmt + outputenv$L5HhDvmt
+outputenv$L5HhDrvlessDvmt <- ve_dt[AVLvl=='L5' & VehicleAccess=='Own', sum(Dvmt*L5DrvLessDvmtProp)]
+outputenv$L5HhDrvlessDvmtProp <- outputenv$L5HhDrvlessDvmt/outputenv$L5HhDvmt
+outputenv$L3HhDvmtProp <- outputenv$L3HhDvmt/outputenv$HhDvmt
+outputenv$L5HhDvmtProp <- outputenv$L5HhDvmt/outputenv$HhDvmt
+outputenv$L3L5HhDvmtProp <- outputenv$L3L5HhDvmt/outputenv$HhDvmt
+outputenv$NumOwnedVehicles <- ve_dt[VehicleAccess=='Own',.N]
+outputenv$NumL3OwnedVehicles <- ve_dt[AVLvl=='L3' & VehicleAccess=='Own',.N]
+outputenv$NumL5OwnedVehicles <- ve_dt[AVLvl=='L5' & VehicleAccess=='Own',.N]
+output_dt <- data.table(Measure=ls(outputenv))
+output_dt[,Value:=sapply(Measure, get, envir=outputenv)]
+fwrite(output_dt, file = outputfile, na = "0")

@@ -290,48 +290,26 @@ class VEModel(FilesCoreModel):
 		# into discrete sub-methods, as each step is loosely independent
 		# and having separate methods makes this clearer.
 		tmip_vars = [var_name.upper() for var_name in params.keys()]
-		if 'LUDENSITYMIX' in tmip_vars:
-			self._manipulate_ludensity(params)
-		if 'INTDENSITYSCEN' in tmip_vars:
-			self._manipulate_intdensity(params)
-		if 'HHPOPGROWTHRATE' in tmip_vars:
-			self._manipulate_population(params)
-		if 'INCOMEGROWTH' in tmip_vars:
-			self._manipulate_income(params)
-		if 'LDVECODRVSCEN' in tmip_vars:
-			self._manipulate_ldvecodrv(params)
-		if 'CARSVCAVAILSCEN' in tmip_vars:
-			self._manipulate_carsvcavail(params)
-		if 'SHDCARSVCOCCUPRATE' in tmip_vars:
-			self._manipulate_shdcarsvc(params)
-		if 'DRVLESSADJSCEN' in tmip_vars:
-			self._manipulate_drvlessadj(params)
-		if 'DRVLESSPROPREMOTEACC' in tmip_vars and 'PROPPARKINGFEEAVOID' in tmip_vars:
-			self._manipulate_drvless_param(params)
-		if 'AVVEHSALESGROWTHSCEN' in tmip_vars:
-			self._manipulate_drvlessvehsales(params)
-		if 'CARCHARGEAVAILSCEN' in tmip_vars:
-			self._manipulate_carchargeavailscen(params)
-		if 'CICHANGERATESCEN' in tmip_vars:
-			self._manipulate_cichange(params)
-		if 'INVESTMENTSCEN' in tmip_vars:
+		if 'OTPINVEST' in tmip_vars:
 			self._manipulate_inv(params)
-		if 'SOVDIVIVERTSCEN' in tmip_vars:
-			self._manipulate_sovdivert(params)
-		if 'TAXSCEN' in tmip_vars:
-			self._manipulate_taxes(params)
-		if 'LANEMILESCEN' in tmip_vars:
-			self._manipulate_mlanemiles(params)
-		if 'OPSDEPLOYSCEN' in tmip_vars:
-			self._manipulate_opsdeployment(params)
-		if 'TRANSITSERVICESCEN' in tmip_vars:
-			self._manipulate_transitservice(params)
-		if 'TDMINVESTMENTSCEN' in tmip_vars:
-			self._manipulate_tdmareatype(params)
-		if 'TRANSITSCEN' in tmip_vars:
-			self._manipulate_transitscen(params)
 		if 'POWERTRAINSCEN' in tmip_vars:
 			self._manipulate_powertrainscen(params)
+		if 'POWERCOSTSCALE' in tmip_vars and 'FUELCOSTSCALE' in tmip_vars:
+			self._manipulate_energycost(params)
+		if 'DRVLESSADJSCEN' in tmip_vars:
+			self._manipulate_drvlessadj(params)
+		if 'CARSVCDEADHEADFACTOR' in tmip_vars and 'CARSVCCOSTFACTOR' in tmip_vars:
+			self._manipulate_carsvcdeadheadfactor(params)
+		if 'CARSVCACCESSTIMEFACTOR' in tmip_vars:
+			self._manipulate_access_time(params)
+		if 'AVMARKETSHARE' in tmip_vars and 'AVL5MARKETSHARE' in tmip_vars:
+			self._manipulate_avshare(params)
+		if 'REGIONTELEWORK' in tmip_vars:
+			self._manipulate_region_telework(params)
+		if 'CONGESTIONCHARGES' in tmip_vars:
+			self._manipulate_congestion_charges(params)
+		if 'ADVALOREMTAX' in tmip_vars:
+			self._manipulate_ad_valorem_tax(params)
 
 		_logger.info(f"{self.config['model_type']} SETUP complete")
 
@@ -531,6 +509,18 @@ class VEModel(FilesCoreModel):
 			)
 			df1.to_csv(out_filename, index=False, float_format="%.5f")
 
+	def _manipulate_inv(self, params):
+		"""
+		Prepare the carbon emissions related files
+
+		Args:
+			params (dict):
+				The parameters for this experiment, including both
+				exogenous uncertainties and policy levers.
+		"""
+
+		return self._manipulate_by_categorical_drop_in(params, 'OTPINVEST', self.scenario_input_dirs.get('OTPINVEST'))
+
 	def _manipulate_ludensity(self, params):
 		"""
 		Prepare the urban mix proportion by marea
@@ -542,6 +532,22 @@ class VEModel(FilesCoreModel):
 		"""
 
 		return self._manipulate_by_mixture(params, 'LUDENSITYMIX', self.scenario_input_dirs.get('LUDENSITYMIX'))
+
+	def _manipulate_energycost(self, params):
+		"""
+		Prepare the azone_prop_sov_dvmt_diverted.csv
+
+		Args:
+			params (dict):
+				The parameters for this experiment, including both
+				exogenous uncertainties and policy levers.
+		"""
+
+		param_mapping = {
+			'FUELCOSTSCALE': 'FuelCost.2005',
+			'POWERCOSTSCALE': 'PowerCost.2005'
+		}
+		return self._manipulate_by_scale(params, param_mapping, self.scenario_input_dirs.get('FUELCOSTSCALE'))
 
 	def _manipulate_intdensity(self, params):
 		"""
@@ -647,7 +653,101 @@ class VEModel(FilesCoreModel):
 				exogenous uncertainties and policy levers.
 		"""
 
-		return self._manipulate_by_categorical_drop_in(params, 'DRVLESSADJSCEN', self.scenario_input_dirs.get('DRVLESSADJSCEN'))
+		param_mapping = {
+			'DRVLESSADJSCEN': 'Beta'
+		}
+		return self._manipulate_by_scale(params, param_mapping, self.scenario_input_dirs.get('DRVLESSADJSCEN'), max_thresh=10)
+	def _manipulate_avshare(self, params):
+		"""
+		Prepare the income input file based on a template file.
+
+		Args:
+			params (dict):
+				The parameters for this experiment, including both
+				exogenous uncertainties and policy levers.
+		"""
+
+		av_share_df = pd.read_csv(join_norm(scenario_input(self.scenario_input_dirs.get('AVMARKETSHARE'),'region_av_market_share.csv')))
+
+		unique_years = av_share_df.Year.unique()
+		base_year = self.model_base_year
+		future_year = self.model_future_year
+		avshare = 1
+
+		if params['AVMARKETSHARE']=='LOW':
+			avshare=.25
+		if params['AVMARKETSHARE']=='MID':
+			avshare=.5
+		if params['AVMARKETSHARE']=='HIGH':
+			avshare=.8
+		if params['AVMARKETSHARE']=='FULL':
+			avshare=1
+		
+		L0Share = 1-avshare
+		L5Share = params['AVL5MARKETSHARE']*avshare
+		L3Share = 1-L0Share-L5Share
+
+		av_share_df.loc[av_share_df.Year==future_year,'AVLvl0Share']=L0Share
+		av_share_df.loc[av_share_df.Year==future_year,'AVLvl3Share']=L3Share
+		av_share_df.loc[av_share_df.Year==future_year,'AVLvl5Share']=L5Share
+
+		out_filename = join_norm(
+			self.resolved_model_path, 'inputs', 'region_av_market_share.csv'
+		)
+		_logger.debug(f"writing updates to: {out_filename}")
+		av_share_df.to_csv(out_filename, index=False)
+
+	def _manipulate_carsvcdeadheadfactor(self, params):
+		"""
+		Prepare the delay and smoothing adjustment factor file
+
+		Args:
+			params (dict):
+				The parameters for this experiment, including both
+				exogenous uncertainties and policy levers.
+		"""
+		param_mapping = {
+			'CARSVCDEADHEADFACTOR': ['ShdCarSvcDeadheadFactor', 'UnShdCarSvcDeadheadFactor'],
+			'CARSVCCOSTFACTOR': ['ShdCarSvcCost.2018', 'UnShdCarSvcCost.2018']
+		}
+		return self._manipulate_by_scale(params, param_mapping, self.scenario_input_dirs.get('CARSVCDEADHEADFACTOR'))
+
+	def _manipulate_region_telework(self, params):
+		"""
+		Prepare the driverless vehicles sales file
+
+		Args:
+			params (dict):
+				The parameters for this experiment, including both
+				exogenous uncertainties and policy levers.
+		"""
+
+		return self._manipulate_by_categorical_drop_in(params, 'REGIONTELEWORK', self.scenario_input_dirs.get('REGIONTELEWORK'))
+
+	def _manipulate_congestion_charges(self, params):
+		"""
+		Prepare congestion charges
+
+		Args:
+			params (dict):
+				The parameters for this experiment, including both
+				exogenous uncertainties and policy levers.
+		"""
+
+		return self._manipulate_by_mixture(params, 'CONGESTIONCHARGES', self.scenario_input_dirs.get('CONGESTIONCHARGES'), float_dtypes=True)
+
+	def _manipulate_ad_valorem_tax(self, params):
+		"""
+		Prepare congestion charges
+
+		Args:
+			params (dict):
+				The parameters for this experiment, including both
+				exogenous uncertainties and policy levers.
+		"""
+
+		return self._manipulate_by_mixture(params, 'ADVALOREMTAX', self.scenario_input_dirs.get('ADVALOREMTAX'), no_mix_cols=('Geo', 'Year', 'VehOwnFlatRateFee.2005'), float_dtypes=True)
+
 
 	def _manipulate_drvless_param(self, params):
 		"""
@@ -707,18 +807,6 @@ class VEModel(FilesCoreModel):
 		"""
 
 		return self._manipulate_by_categorical_drop_in(params, 'CICHANGERATESCEN', self.scenario_input_dirs.get('CICHANGERATESCEN'))
-
-	def _manipulate_inv(self, params):
-		"""
-		Prepare the investment related files
-        Type: Categorical
-		Args:
-			params (dict):
-				The parameters for this experiment, including both
-				exogenous uncertainties and policy levers.
-		"""
-
-		return self._manipulate_by_categorical_drop_in(params, 'INVESTMENTSCEN', self.scenario_input_dirs.get('INVESTMENTSCEN'))
 
 	def _manipulate_sovdivert(self, params):
 		"""
@@ -846,30 +934,19 @@ class VEModel(FilesCoreModel):
 
 		return self._manipulate_by_categorical_drop_in(params, 'TRANSIT', self.scenario_input_dirs.get('TRANSIT'))
 
-	def _manipulate_bikewalk(self, params):
+	def _manipulate_access_time(self, params):
 		"""
-		Prepare the bike and walk files
-        Type: Categorical
+		Prepare the delay and smoothing adjustment factor file
+
 		Args:
 			params (dict):
 				The parameters for this experiment, including both
 				exogenous uncertainties and policy levers.
 		"""
-
-		return self._manipulate_by_categorical_drop_in(params, 'BIKEWALK', self.scenario_input_dirs.get('BIKEWALK'))
-
-	def _manipulate_operations(self, params):
-		"""
-		Prepare the operations files
-        Type: Categorical
-		Args:
-			params (dict):
-				The parameters for this experiment, including both
-				exogenous uncertainties and policy levers.
-		"""
-
-		return self._manipulate_by_categorical_drop_in(params, 'OPERATIONS', self.scenario_input_dirs.get('OPERATIONS'))
-
+		param_mapping = {
+			'CARSVCACCESSTIMEFACTOR': ['ShdCarSvcAccessTime', 'UnShdCarSvcAccessTime']
+		}
+		return self._manipulate_by_scale(params, param_mapping, self.scenario_input_dirs.get('CARSVCACCESSTIMEFACTOR'))
 
 	def run(self):
 		"""

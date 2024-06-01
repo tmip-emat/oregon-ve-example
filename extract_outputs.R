@@ -2,16 +2,17 @@
 
 library(visioneval)
 ematmodel <- openModel(getwd())
-ematmodelresults <- ematmodel$results()$Results[[ematmodel$modelName]]
+ematmodelresults <- ematmodel$results()
+ModelName <- ematmodel$modelName
 
-DatastoreName <- file.path(ematmodelresults$resultsPath, ematmodel$setting("DatastoreName"))
+DatastoreName <- file.path(ematmodelresults$Results[[ModelName]]$resultsPath, ematmodel$setting("DatastoreName"))
 DatastoreType <- ematmodel$setting("DatastoreType")
-Ma <- unique(ematmodelresults$ModelState()$Geo$Marea)
-Az <- unique(ematmodelresults$ModelState()$Geo$Azone)
+Ma <- unique(ematmodelresults$Results[[ModelName]]$ModelState()$Geo$Marea)
+Az <- unique(ematmodelresults$Results[[ModelName]]$ModelState()$Geo$Azone)
 Years <- ematmodel$RunParam_ls$Years
 
 # Create an output directory if one doesn't exist
-output_path <- file.path(ematmodelresults$resultsPath, "output")
+output_path <- file.path(ematmodelresults$Results[[ModelName]]$resultsPath, "output")
 if(!dir.exists(output_path)){
   dir.create(output_path)
 }

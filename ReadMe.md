@@ -34,17 +34,16 @@ To run multiple scenarios/experiments in TMIP-EMAT:
 2. Navigate to the TMIP-EMAT directory **EMAT_VE**.
 3. Enter the command `jupyter notebook` and press *Enter*. This will open a jupyter notbook in a browser and list all the files contained in the **EMAT_VE** directory.
 4. Within the jupyter notebook navigate to **EMAT-VE-Configs** directory and edit the following parameters in the *ve-model-config.yml*:
-    a. *base-model*: This is the path to the model run that contains the datastore for base year. EMAT uses this model to load the results in all the model runs.
-	b. *r_library_path*: This is the path to VisionEval R library that will be used to run all the VE models.
-	c. *r_runtime_path*: This is the path to VisionEval runtime environment directory.
-	d. *r_executable*: This is the location of **R** executable that will be used to run VE models.
+    1. *base-model*: This is the path to the model run that contains the datastore for base year. EMAT uses this model to load the results in all the model runs.
+	2. *r_library_path*: This is the path to VisionEval R library that will be used to run all the VE models.
+	3. *r_runtime_path*: This is the path to VisionEval runtime environment directory.
+	4. *r_executable*: This is the location of **R** executable that will be used to run VE models.
 
 5. Click on *ODOT-TMIP-METAMODEL.ipynb*. This will open the jupyter notbook.
 6. Check the values of following parameters in the **Cell Block 2**:
-
-    a. *run_experiments*: It's a logical value that determines whether to run multiple scenarios (**True**) or load the results from the database (**False**).
-	b. *database_name*: A character value that tells the name of the database. If one doesn't exists then the notebook will create one. Note that if the notebook is creating the database then it cannot load results and the run_experiments should be set to True.
-	c. *model_scope_name*: A character value that indicates the name of the model scope file that should be used to design the experiments.
-	d. *num_workers*: An integer value that specifies the number of parallel processors to use to run scenarios.
-	e. *num_experiments*: An integer value that specifies the number of scenarios to create.
+    1. *run_experiments*: It's a logical value that determines whether to run multiple scenarios (**True**) or load the results from the database (**False**).
+	2. *database_name*: A character value that tells the name of the database. If one doesn't exists then the notebook will create one. Note that if the notebook is creating the database then it cannot load results and the run_experiments should be set to True.
+	3. *model_scope_name*: A character value that indicates the name of the model scope file that should be used to design the experiments.
+	4. *num_workers*: An integer value that specifies the number of parallel processors to use to run scenarios.
+	5. *num_experiments*: An integer value that specifies the number of scenarios to create.
 

@@ -1,0 +1,29 @@
+name: render-docs
+on:
+  push:
+    branches:
+      - docs
+      - main
+permissions:
+  contents: write
+env:
+  UV_SYSTEM_PYTHON: 1
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - run: uv pip install mkdocs-material "markdown-exec[ansi]"
+      - run: mkdocs gh-deploy --force

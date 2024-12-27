@@ -49,6 +49,10 @@ class VEModel(FilesCoreModel): # (1)!
 
 You can see some examples of the `FilesCoreModel` interface [here](https://github.com/tmip-emat/tmip-emat-ve/blob/1f62205652d26389d1767a2cdb0ba1fabe057dea/emat_verspm.py#L36)
 and [here](https://github.com/tmip-emat/ve-integration/blob/ff9e83fdc5adf4414dd9454dd980d6f32464bf09/emat_ve_wrapper.py#L40).
+The process for creating a new analysis with EMAT and VisionEval includes creating
+a similar class that is a subclass of `FilesCoreModel`, and then defining the specific
+methods needed to carry out the steps of the integration.  This can be done from
+scratch, or by copying and modifying an existing example.
 
 ## Setting Up an Experiment
 
@@ -100,6 +104,11 @@ based on the scope:
 - [Template Injection](#template-injection)
 - [Direct Injection](#direct-injection)
 - [Custom Methods](#custom-methods)
+
+Each of these methods can be implemented in a bespoke manner for each specific
+input parameter (both policy levers and exogenous uncertainties), or you can use
+generic methods that can be applied to a wide range of input parameters.  The generic
+approach is shown in the example repositories.
 
 ### Categorical Drop-In
 
@@ -397,8 +406,104 @@ Scenario-Inputs/
 
 ### Scaling Data Tables
 
-Forthcoming: documentation of the `_manipulate_by_scale` method, which allows for
-scaling of single input files.
+The scaling data tables method is much like the mixture of data tables method, but
+instead of linearly interpolating between two input files, the scaling data tables
+method will scale all the values in selected columns of an input file up or down based on the 
+value of the policy lever or exogenous uncertainty.  This is useful for continuous
+inputs that are best represented as a single table, but where the values in that
+table can be scaled up or down.  For example, you may have a population projection
+that represents a "baseline" scenario, and you want to explore the effects of
+different levels of population growth.
+
+The `_manipulate_by_scale` function shown below can be included in an integration's 
+subclass of `FilesCoreModel`, and used to scale the values in the input files 
+based on the value of the policy lever or exogenous uncertainty.
+
+``` python
+def _manipulate_by_scale(
+    self, 
+    params, # (1)!
+    param_map, # (2)!
+    ve_scenario_dir, # (3)!
+    max_thresh=1E9, # (4)!
+):
+    # Gather list of all files in scenario input directory 
+    filenames = []
+    for i in os.scandir(scenario_input(ve_scenario_dir)):
+        if i.is_file():
+            filenames.append(i.name)
+
+    for filename in filenames:
+        df1 = pd.read_csv(scenario_input(ve_scenario_dir,filename))
+        for param_name, column_names in param_map.items():
+            if isinstance(column_names, str):
+                column_names = [column_names]
+            for column_name in column_names:
+                df1[[column_name]] = (
+                    df1[[column_name]]
+                    * params.get(param_name)
+                ).clip(lower=-max_thresh, upper=max_thresh) # (5)!
+
+        out_filename = join_norm(
+            self.resolved_model_path, 'inputs', filename
+        )
+        df1.to_csv(out_filename, index=False, float_format="%.5f", na_rep='NA')
+```
+
+1.  The `params` dictionary is passed through from the `setup` method to the
+    `_manipulate_by_scale` method.
+2.  The `param_map` argument is a dictionary that maps the parameter names in the
+    `params` dictionary to the column names in the input file that should be scaled.
+3.  The `ve_scenario_dir` argument is the directory where the input files for the 
+    scaling are stored.
+4.  The `max_thresh` argument is the maximum value that any value in the input file
+    can be scaled to.  This is important to ensure that the scaled values are not too
+    large or too small.
+5.  The `clip` method is used to ensure that the scaled values are not too large or too
+    small.  This is important to ensure that the scaled values are within the range of
+    values that VisionEval is expecting.
+
+If you use this approach, you would not set the `min` and `max` values for the 
+relevant parameter in the exploratory scope definition to 0 and 1, as you would 
+for the mixture model.  Instead, set those limits to the minimum and maximum
+values that you want to use for the scaling factor.  The upper and lower limits
+need not be symmetric around 1.0, as the scaling factor can be used to scale 
+values up or down, or both.
+
+``` yaml
+    LUDENSITYMIX:
+        shortname: Urban Mix Prop
+        address: LUDENSITYMIX
+        ptype: exogenous uncertainty
+        dtype: float # (1)!
+        desc: Urban proportion for each marea by year
+        default: 0
+        min: 0.75 # (2)!
+        max: 1.5 # (3)!
+```
+
+1.  The `dtype` is set to `float` to indicate that this is a continuous input, 
+    which can take on a range of values.
+2.  The `min` value for scaling factor can be any value.  Positive values less
+    than or equal to 1.0 are most common, but negative values are also allowable,
+    if the signs on the targeted values might be inverted.
+3.  The `max` value for the scaling factor can be any value.  Positive values
+    greater than or equal to 1.0 are most common.
+
+The function `__manipulate_by_scale` written above also implies that the input 
+files on which the scaling factor are applied are in the scenario directory, not
+a subdirectory of the scenario directory, as was the case in mixture models.  
+This is because the scaling factor method is applied to a single set of inputs,
+so there's no need to have multiple subdirectories for the input files.
+
+``` tree    
+Scenario-Inputs/
+    OTP/
+        ANOTHER_PARAMETER/
+        LUDENSITYMIX/
+            marea_mix_targets.csv
+        OTHER_PARAMETER/
+```
 
 ### Additive Data Tables
 

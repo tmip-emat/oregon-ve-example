@@ -9,92 +9,94 @@
     run VisionEval model to get the outputs, then extract whatever performance
     measures we want from those outputs and feed them back to EMAT.
 
-
-The idea behind EMAT is to run a number of experiments, and then analyze the 
-results of those experiments.  The number of experiments that needs to be run
+The idea behind EMAT is to run a number of experiments, and then analyze the
+results of those experiments. The number of experiments that needs to be run
 is a function of the level of complexity of the EMAT scope, but in general it
-is more experiments that a user would want to run manually.  Thus, the EMAT
+is more experiments that a user would want to run manually. Thus, the EMAT
 toolset is designed to automate the process of running experiments.
 
 When working with VisionEval, at least as defined in this demonstration repository,
-we will be treating the VisionEval model as a "files-based core model".  Doing so
+we will be treating the VisionEval model as a "files-based core model". Doing so
 requires a few steps for each experiment:
 
-- Prepare the input files for the VisionEval model, based on the values of policy 
-  levers and exogenous uncertainties defined for the experiment.
+- Prepare the input files for the VisionEval model, based on the values of policy
+    levers and exogenous uncertainties defined for the experiment.
 - Run the VisionEval model, using the input files that have been prepared.
 - (Optional) Run any post-processing steps that are needed to extract the results
-  of the experiment from the output files of the VisionEval model. 
+    of the experiment from the output files of the VisionEval model.
 - Collect the output files from the VisionEval model and parse then to extract the
-  results of the experiment.
+    results of the experiment.
 
-Each of these steps is encapsulated in a Python function that is part of the 
-[`FilesCoreModel`](https://tmip-emat.github.io/source/emat.models/files-api.html) 
-interface.  In the implementation code, you will see a class that is a subclass of
+Each of these steps is encapsulated in a Python function that is part of the
+[`FilesCoreModel`](https://tmip-emat.github.io/source/emat.models/files-api.html)
+interface. In the implementation code, you will see a class that is a subclass of
 `FilesCoreModel`, and that class will define the specific steps needed to prepare
 the input files, run the model, and extract the results.
 
-``` python
+```python
 from emat.model.core_files import FilesCoreModel
 
-class VEModel(FilesCoreModel): # (1)!
-	"""
-	A class for using Vision Eval as a files core model.
-	"""
-	...
+
+class VEModel(FilesCoreModel):  # (1)!
+    """
+    A class for using Vision Eval as a files core model.
+    """
+
+    ...
 ```
 
-1.  The `VEModel` class is a subclass of `FilesCoreModel`, which defines the specific
+1. The `VEModel` class is a subclass of `FilesCoreModel`, which defines the specific
     steps needed to prepare the input files, run the model, and extract the results.
 
 You can see some examples of the `FilesCoreModel` interface [here](https://github.com/tmip-emat/tmip-emat-ve/blob/1f62205652d26389d1767a2cdb0ba1fabe057dea/emat_verspm.py#L36)
 and [here](https://github.com/tmip-emat/ve-integration/blob/ff9e83fdc5adf4414dd9454dd980d6f32464bf09/emat_ve_wrapper.py#L40).
 The process for creating a new analysis with EMAT and VisionEval includes creating
 a similar class that is a subclass of `FilesCoreModel`, and then defining the specific
-methods needed to carry out the steps of the integration.  This can be done from
+methods needed to carry out the steps of the integration. This can be done from
 scratch, or by copying and modifying an existing example.
 
 ## Setting Up an Experiment
 
-Each experiment involves making a complete copy of the VisionEval model in a contained 
+Each experiment involves making a complete copy of the VisionEval model in a contained
 environment, and then modifying the input files for that copy of the VisionEval model
 to reflect the specific values of policy levers and exogenous uncertainties for that
-experiment.  The `FilesCoreModel` interface defines the `setup` method as the place to
-create a new copy of the VisionEval model in a contained environment, and then modify 
+experiment. The `FilesCoreModel` interface defines the `setup` method as the place to
+create a new copy of the VisionEval model in a contained environment, and then modify
 the input files for that copy of the VisionEval model. The `setup` method needs to be
 overloaded in a subclass of `FilesCoreModel` to define the specific steps needed to
 modify the input files for the experiment.
 
-``` python
+```python
 class VEModel(FilesCoreModel):
     ...
-	def setup(self, params: dict): # (1)!
-		"""
-		Configure the core model with the experiment variable values.
 
-		Args:
-			params (dict):
-				experiment variables including both exogenous
-				uncertainty and policy levers
+    def setup(self, params: dict):  # (1)!
+        """
+        Configure the core model with the experiment variable values.
 
-		Raises:
-			KeyError:
-				if a defined experiment variable is not supported
-				by the core model
-		"""
+        Args:
+            params (dict):
+                experiment variables including both exogenous
+                uncertainty and policy levers
+
+        Raises:
+            KeyError:
+                if a defined experiment variable is not supported
+                by the core model
+        """
 ```
 
-1.  The `setup` method accepts a dictionary of parameters, which includes the values of
+1. The `setup` method accepts a dictionary of parameters, which includes the values of
     policy levers and exogenous uncertainties for the experiment.
 
 Within the `setup` method, the subclass of `FilesCoreModel` will need to make a complete
 copy of the VisionEval model in a contained environment, and then modify the input files
 for that copy of the VisionEval model to reflect the specific values of policy levers and
-exogenous uncertainties for that experiment. 
+exogenous uncertainties for that experiment.
 
-There are numerous possible ways to prepare the input files for the VisionEval model, 
+There are numerous possible ways to prepare the input files for the VisionEval model,
 depending on the exploratory scope and the types of inputs that need to be modified.
-This demo repository includes a few different examples of how to prepare input files 
+This demo repository includes a few different examples of how to prepare input files
 based on the scope:
 
 - [Categorical Drop-In](#categorical-drop-in)
@@ -107,88 +109,89 @@ based on the scope:
 
 Each of these methods can be implemented in a bespoke manner for each specific
 input parameter (both policy levers and exogenous uncertainties), or you can use
-generic methods that can be applied to a wide range of input parameters.  The generic
+generic methods that can be applied to a wide range of input parameters. The generic
 approach is shown in the example repositories.
 
 ### Categorical Drop-In
 
-Many of the input files for VisionEval are in the form of CSV files.  The simplest way
-to actuate a change in the input files is to simply select an entire file that has the 
-desired values, and copy that file into the requisite input location.  This is limited
+Many of the input files for VisionEval are in the form of CSV files. The simplest way
+to actuate a change in the input files is to simply select an entire file that has the
+desired values, and copy that file into the requisite input location. This is limited
 to categorical inputs, which are inputs that can be represented as discrete categorical
-values.  For example, you may have two different population projections, one that 
+values. For example, you may have two different population projections, one that
 represents scenario "A" where a particular brownfield area is cleaned up
 and developed, and another that represents scenario "B" where the brownfield
-is left as is.  Under this policy lever, it doesn't make sense to have an intermediate
+is left as is. Under this policy lever, it doesn't make sense to have an intermediate
 value ("we'll just clean up part of the toxic waste, and let only few people move in").
 
 An advantage of this method is that it is simple to implement, and it places no
-limits on the format of the input files.  There is no need to have a specific format
-or a matching number of rows or columns in the input files.  In the population projection
-example considered above, the input files for the two scenarios could have different 
+limits on the format of the input files. There is no need to have a specific format
+or a matching number of rows or columns in the input files. In the population projection
+example considered above, the input files for the two scenarios could have different
 numbers of rows as one of the two scenarios could imply a different zonal structure
 within the region.
 
-In this example repository, this approach is called the "categorical drop-in" method.  
-The VisionEval model will either use the inputs file "A" or the inputs file "B", 
-but not a mix of the two.  This is expressed in the code by the `categorical_drop_in` 
+In this example repository, this approach is called the "categorical drop-in" method.\
+The VisionEval model will either use the inputs file "A" or the inputs file "B",
+but not a mix of the two. This is expressed in the code by the `categorical_drop_in`
 method, which is a method of the `FilesCoreModel`.
 
-``` python
+```python
 def _manipulate_by_categorical_drop_in(
-    self, 
-    params: dict, # (1)!
-    cat_param: str, # (2)!
-    ve_scenario_dir: os.PathLike, # (3)!
+    self,
+    params: dict,  # (1)!
+    cat_param: str,  # (2)!
+    ve_scenario_dir: os.PathLike,  # (3)!
 ):
     scenario_dir = params[cat_param]
-    for i in os.scandir(scenario_input(ve_scenario_dir,scenario_dir)): # (4)!
+    for i in os.scandir(scenario_input(ve_scenario_dir, scenario_dir)):  # (4)!
         if i.is_file():
             shutil.copyfile(
-                scenario_input(ve_scenario_dir,scenario_dir, i.name),
-                join_norm(self.resolved_model_path, 'inputs', i.name)
+                scenario_input(ve_scenario_dir, scenario_dir, i.name),
+                join_norm(self.resolved_model_path, "inputs", i.name),
             )
 ```
 
-1.  The `params` dictionary is passed through to the `_manipulate_by_categorical_drop_in`
-    method.  This dictionary includes the values of all the policy levers and exogenous 
+1. The `params` dictionary is passed through to the `_manipulate_by_categorical_drop_in`
+    method. This dictionary includes the values of all the policy levers and exogenous
     uncertainties for the experiment.
-2.  The `cat_param` argument is the name of the parameter in the `params` dictionary that
+2. The `cat_param` argument is the name of the parameter in the `params` dictionary that
     is the categorical drop-in.
-3.  The `ve_scenario_dir` argument is the directory where the categorical input files for
+3. The `ve_scenario_dir` argument is the directory where the categorical input files for
     the categorical drop-in are stored.
-4.  The `_manipulate_by_categorical_drop_in` method will scan the appropriate directory  
-    where the categorical input files are stored, and copy the input files for the selected 
+4. The `_manipulate_by_categorical_drop_in` method will scan the appropriate directory\
+    where the categorical input files are stored, and copy the input files for the selected
     categorical value into the requisite input location for the VisionEval model.
 
-This method is in turn called from individual `setup` sub-methods, which will 
-define the specific input parameters that are categorical drop-ins.  For example,
+This method is in turn called from individual `setup` sub-methods, which will
+define the specific input parameters that are categorical drop-ins. For example,
 the `_manipulate_carsvcavail` method can define the specific input parameters that are
 categorical drop-ins for car service availability inputs.
 
-``` python
+```python
 def _manipulate_carsvcavail(self, params):
     return self._manipulate_by_categorical_drop_in(
-        params, # (1)!
-        'CARSVCAVAILSCEN', # (2)!
-        self.scenario_input_dirs.get('CARSVCAVAILSCEN') # (3)!
+        params,  # (1)!
+        "CARSVCAVAILSCEN",  # (2)!
+        self.scenario_input_dirs.get("CARSVCAVAILSCEN"),  # (3)!
     )
 ```
 
-1.  The `params` dictionary is passed through to the 
+1. The `params` dictionary is passed through to the
     `_manipulate_by_categorical_drop_in` method.
-2.  The second argument to the `_manipulate_by_categorical_drop_in` method is the
+2. The second argument to the `_manipulate_by_categorical_drop_in` method is the
     name of the parameter in the `params` dictionary that is the categorical drop-in,
     in this case the `CARSVCAVAILSCEN` parameter.
-3.  The third argument to the `_manipulate_by_categorical_drop_in` method is the
-    directory where the categorical input files for the categorical drop-in are 
+3. The third argument to the `_manipulate_by_categorical_drop_in` method is the
+    directory where the categorical input files for the categorical drop-in are
     stored.
 
-You will find this function mirrored in the EMAT exploratory scope definition, 
+You will find this function mirrored in the EMAT exploratory scope definition,
 where the categorical drop-in is defined as an uncertainty.
-    
-``` yaml 
-CARSVCAVAILSCEN:
+
+```yaml
+inputs:
+  CARSVCAVAILSCEN:
     shortname: Car Service Availability
     address: CARSVCAVAILSCEN
     ptype: exogenous uncertainty
@@ -201,22 +204,22 @@ CARSVCAVAILSCEN:
         - high   
 ```
 
-1.  The `dtype` is set to `cat` to indicate that this is a categorical input, 
+1. The `dtype` is set to `cat` to indicate that this is a categorical input,
     which can only take on one of a discrete set of values.
-2.  The `default` value is set to `mid`, which will be the selected value for 
+2. The `default` value is set to `mid`, which will be the selected value for
     this parameter if no other value is specified.
-3.  The `values` list defines the discrete set of values that this parameter can 
-    take on.  These should be strings, so that we can match against sub-directory
+3. The `values` list defines the discrete set of values that this parameter can
+    take on. These should be strings, so that we can match against sub-directory
     names in the `Scenario-Inputs` directory of the VisionEval model.
 
 This structure also requires each categorical drop-in to have a corresponding
 directory in the `inputs` directory of the VisionEval model, where the input file(s)
 for each categorical drop-in are stored. Note that there is a directory matching
 each categorical value, and within that directory are the input files that are
-to be used when that categorical value is selected.  Generally, the names of the 
+to be used when that categorical value is selected. Generally, the names of the
 input files will be the same across all categorical values, as shown here.
 
-``` tree
+```tree
 Scenario-Inputs/
     OTP/
         ANOTHER_PARAMETER/
@@ -235,55 +238,56 @@ Scenario-Inputs/
 In contrast to the categorical drop-in method, the "mixture of data tables" method
 allows for creating "intermediate" input files that are a mix of different input files.
 The approach is suitable for continuous inputs, which are inputs that can take on a
-range of values.  For example, you may have a land use density projection that has
+range of values. For example, you may have a land use density projection that has
 upper and lower bounds, and you want to explore the effects of different levels of
-density between those limits. 
+density between those limits.
 
 An advantage of this method is that it allows for a more fine-grained exploration of
-the input space, and it can be used for continuous inputs.  However, it does require
-that the input files have a specific format (a CSV table containing primarily numeric 
+the input space, and it can be used for continuous inputs. However, it does require
+that the input files have a specific format (a CSV table containing primarily numeric
 data), and that the number of rows and columns in the input files match across both
 the input files, which are labeled as "1" and "2" in this example.
 
 Instead of copying an entire file, the mixture of data tables method will read in
-both input files, and then linearly interpolate between the two input files based 
-on the value of the policy lever or exogenous uncertainty.  This is expressed in the
+both input files, and then linearly interpolate between the two input files based
+on the value of the policy lever or exogenous uncertainty. This is expressed in the
 code by the `_manipulate_by_mixture` method, which is a method of the `FilesCoreModel`.
 
-``` python
+```python
 def _manipulate_by_mixture(
-    self, 
-    params, # (1)!
-    weight_param, # (2)!
-    ve_scenario_dir, # (3)!
-    no_mix_cols=('Year', 'Geo',), # (4)!
-    float_dtypes=False, # (5)!
+    self,
+    params,  # (1)!
+    weight_param,  # (2)!
+    ve_scenario_dir,  # (3)!
+    no_mix_cols=(
+        "Year",
+        "Geo",
+    ),  # (4)!
+    float_dtypes=False,  # (5)!
 ):
     weight_2 = params[weight_param]
-    weight_1 = 1.0-weight_2
+    weight_1 = 1.0 - weight_2
 
     # Gather list of all files in directory "1", and confirm they
     # are also in directory "2"
     filenames = []
-    for i in os.scandir(scenario_input(ve_scenario_dir,'1')):
+    for i in os.scandir(scenario_input(ve_scenario_dir, "1")):
         if i.is_file():
             filenames.append(i.name)
-            f2 = scenario_input(ve_scenario_dir,'2', i.name)
+            f2 = scenario_input(ve_scenario_dir, "2", i.name)
             if not os.path.exists(f2):
                 raise FileNotFoundError(f2)
 
     for filename in filenames:
-        df1 = pd.read_csv(scenario_input(ve_scenario_dir,'1',filename))
+        df1 = pd.read_csv(scenario_input(ve_scenario_dir, "1", filename))
         isna_ = (df1.isnull().values).any()
-        df1.fillna(0, inplace=True) # (6)!
-        df2 = pd.read_csv(scenario_input(ve_scenario_dir,'2',filename))
+        df1.fillna(0, inplace=True)  # (6)!
+        df2 = pd.read_csv(scenario_input(ve_scenario_dir, "2", filename))
         df2.fillna(0, inplace=True)
 
-        float_mix_cols = list(df1.select_dtypes('float').columns)
+        float_mix_cols = list(df1.select_dtypes("float").columns)
         if float_dtypes:
-            float_mix_cols = float_mix_cols+list(
-                df1.select_dtypes('int').columns
-            )
+            float_mix_cols = float_mix_cols + list(df1.select_dtypes("int").columns)
         for j in no_mix_cols:
             if j in float_mix_cols:
                 float_mix_cols.remove(j)
@@ -293,7 +297,7 @@ def _manipulate_by_mixture(
             df2_float = df2[float_mix_cols]
             df1[float_mix_cols] = df1_float * weight_1 + df2_float * weight_2
 
-        int_mix_cols = list(df1.select_dtypes('int').columns)
+        int_mix_cols = list(df1.select_dtypes("int").columns)
         if float_dtypes:
             int_mix_cols = list()
         for j in no_mix_cols:
@@ -304,66 +308,65 @@ def _manipulate_by_mixture(
             df1_int = df1[int_mix_cols]
             df2_int = df2[int_mix_cols]
             df_int_mix = df1_int * weight_1 + df2_int * weight_2
-            df1[int_mix_cols] = np.round(df_int_mix).astype(int) # (7)!
+            df1[int_mix_cols] = np.round(df_int_mix).astype(int)  # (7)!
 
-        out_filename = join_norm(
-            self.resolved_model_path, 'inputs', filename
-        )
+        out_filename = join_norm(self.resolved_model_path, "inputs", filename)
         if isna_:
             df1.replace(0, np.nan, inplace=True)
-        df1.to_csv(out_filename, index=False, float_format="%.5f", na_rep='NA')
+        df1.to_csv(out_filename, index=False, float_format="%.5f", na_rep="NA")
 ```
 
-1.  The `params` dictionary is passed through to the `_manipulate_by_mixture` method.
-2.  The `weight_param` argument is the name of the parameter in the `params` dictionary
+1. The `params` dictionary is passed through to the `_manipulate_by_mixture` method.
+2. The `weight_param` argument is the name of the parameter in the `params` dictionary
     that is the weight for the mixture of data tables.
-3.  The `ve_scenario_dir` argument is the directory where the input files for the 
+3. The `ve_scenario_dir` argument is the directory where the input files for the
     mixture of data tables are stored. There should be two subdirectories, "1" and "2".
-4.  The `no_mix_cols` argument is a list of column names that should not be mixed. This 
+4. The `no_mix_cols` argument is a list of column names that should not be mixed. This
     is useful for columns that are not numerical, such as year or geography, which should
     not be mixed (or for which there is no reasonable linear interpolation). These columns
     will be copied from the input file in directory "1" to the output file.
-5.  The `float_dtypes` argument is a boolean that indicates whether integer columns
+5. The `float_dtypes` argument is a boolean that indicates whether integer columns
     should be treated as float columns for the purposes of mixing. Setting this
     to `True` will treat integer columns as float columns, and will mix them as such,
     which can be problematic if VisionEval is expecting integers.
-6.  The `isna_` variable is set to `True` if there are any `NaN` values in the input
-    file.  If there are, these will be replaced with zeros for the purposes of mixing,
+6. The `isna_` variable is set to `True` if there are any `NaN` values in the input
+    file. If there are, these will be replaced with zeros for the purposes of mixing,
     and then replaced with `NaN` in the output file, as linear interpolation of `NaN`
     values is not possible.
-7.  The `df_int_mix` variable is the linear interpolation of the integer columns, and
+7. The `df_int_mix` variable is the linear interpolation of the integer columns, and
     is optionally rounded to the nearest integer. This is done to ensure that the output file
     has integer values, which is important if VisionEval is expecting integers.
 
 This method is in turn called from individual `setup` sub-methods, which will
-define the specific input parameters that are mixtures of data tables.  For example,
-the [`_manipulate_landuse`](https://github.com/tmip-emat/ve-integration/blob/7b41df9c94b2671ccef0fd214593f3629f8337e3/emat_ve_wrapper.py#L534-L544) 
+define the specific input parameters that are mixtures of data tables. For example,
+the [`_manipulate_landuse`](https://github.com/tmip-emat/ve-integration/blob/7b41df9c94b2671ccef0fd214593f3629f8337e3/emat_ve_wrapper.py#L534-L544)
 method can define the specific input parameters that are
 mixtures of data tables for land use density inputs.
 
-``` python
+```python
 def _manipulate_ludensity(self, params):
     return self._manipulate_by_mixture(
-        params, # (1)!
-        'LUDENSITYMIX', # (2)!
-        self.scenario_input_dirs.get('LUDENSITYMIX'), # (3)!
+        params,  # (1)!
+        "LUDENSITYMIX",  # (2)!
+        self.scenario_input_dirs.get("LUDENSITYMIX"),  # (3)!
     )
 ```
 
-1.  The `params` dictionary is passed through to the 
+1. The `params` dictionary is passed through to the
     `__manipulate_by_mixture` method.
-2.  The second argument to the `_manipulate_by_mixture` method is the
+2. The second argument to the `_manipulate_by_mixture` method is the
     name of the parameter in the `params` dictionary that is controlling the,
     mixture, in this case the `LUDENSITYMIX` parameter.
-3.  The third argument to the `__manipulate_by_mixture` method is the
-    directory where the categorical input files for the mixture bounds are 
+3. The third argument to the `__manipulate_by_mixture` method is the
+    directory where the categorical input files for the mixture bounds are
     stored.
 
-You will find this function mirrored in the EMAT exploratory 
+You will find this function mirrored in the EMAT exploratory
 [scope definition](https://github.com/tmip-emat/ve-integration/blob/7b41df9c94b2671ccef0fd214593f3629f8337e3/EMAT-VE-Configs/odot-otp-scope.yml#L11-L23),
 where the mixture of data tables is defined as an exogenous uncertainty.
 
-``` yaml
+```yaml
+inputs:
     LUDENSITYMIX:
         shortname: Urban Mix Prop
         address: LUDENSITYMIX
@@ -375,24 +378,24 @@ where the mixture of data tables is defined as an exogenous uncertainty.
         max: 1 # (3)!
 ```
 
-1.  The `dtype` is set to `float` to indicate that this is a continuous input, 
+1. The `dtype` is set to `float` to indicate that this is a continuous input,
     which can take on a range of values.
-2.  The `min` value for mixtures is always set to `0`, which represents the lower bound for this 
+2. The `min` value for mixtures is always set to `0`, which represents the lower bound for this
     parameter, and will set the weight of the "1" input file to `1.0` and the
     weight of the "2" input file to `0.0`.
-3.  The `max` value for mixtures is always set to `1`, which represents the upper bound for this 
+3. The `max` value for mixtures is always set to `1`, which represents the upper bound for this
     parameter, and will set the weight of the "1" input file to `0.0` and the
     weight of the "2" input file to `1.0`.
-    
+
 This structure also requires each mixture to have a corresponding
 directory in the `inputs` directory of the VisionEval model, where the input file(s)
 for each categorical drop-in are stored. Note that there are exactly two sub-directories
 in this parameters directory, and they are named "1" and "2", and within those two directories
-are the input files that are to be mixed together. The names of the 
-input file(s) *must* be the same across all both sub-directories, as shown here, 
+are the input files that are to be mixed together. The names of the
+input file(s) *must* be the same across all both sub-directories, as shown here,
 and they must be in the same format (a CSV table containing primarily numeric data).
 
-``` tree
+```tree
 Scenario-Inputs/
     OTP/
         ANOTHER_PARAMETER/
@@ -408,69 +411,67 @@ Scenario-Inputs/
 
 The scaling data tables method is much like the mixture of data tables method, but
 instead of linearly interpolating between two input files, the scaling data tables
-method will scale all the values in selected columns of an input file up or down based on the 
-value of the policy lever or exogenous uncertainty.  This is useful for continuous
+method will scale all the values in selected columns of an input file up or down based on the
+value of the policy lever or exogenous uncertainty. This is useful for continuous
 inputs that are best represented as a single table, but where the values in that
-table can be scaled up or down.  For example, you may have a population projection
+table can be scaled up or down. For example, you may have a population projection
 that represents a "baseline" scenario, and you want to explore the effects of
 different levels of population growth.
 
-The `_manipulate_by_scale` function shown below can be included in an integration's 
-subclass of `FilesCoreModel`, and used to scale the values in the input files 
+The `_manipulate_by_scale` function shown below can be included in an integration's
+subclass of `FilesCoreModel`, and used to scale the values in the input files
 based on the value of the policy lever or exogenous uncertainty.
 
-``` python
+```python
 def _manipulate_by_scale(
-    self, 
-    params, # (1)!
-    param_map, # (2)!
-    ve_scenario_dir, # (3)!
-    max_thresh=1E9, # (4)!
+    self,
+    params,  # (1)!
+    param_map,  # (2)!
+    ve_scenario_dir,  # (3)!
+    max_thresh=1e9,  # (4)!
 ):
-    # Gather list of all files in scenario input directory 
+    # Gather list of all files in scenario input directory
     filenames = []
     for i in os.scandir(scenario_input(ve_scenario_dir)):
         if i.is_file():
             filenames.append(i.name)
 
     for filename in filenames:
-        df1 = pd.read_csv(scenario_input(ve_scenario_dir,filename))
+        df1 = pd.read_csv(scenario_input(ve_scenario_dir, filename))
         for param_name, column_names in param_map.items():
             if isinstance(column_names, str):
                 column_names = [column_names]
             for column_name in column_names:
-                df1[[column_name]] = (
-                    df1[[column_name]]
-                    * params.get(param_name)
-                ).clip(lower=-max_thresh, upper=max_thresh) # (5)!
+                df1[[column_name]] = (df1[[column_name]] * params.get(param_name)).clip(
+                    lower=-max_thresh, upper=max_thresh
+                )  # (5)!
 
-        out_filename = join_norm(
-            self.resolved_model_path, 'inputs', filename
-        )
-        df1.to_csv(out_filename, index=False, float_format="%.5f", na_rep='NA')
+        out_filename = join_norm(self.resolved_model_path, "inputs", filename)
+        df1.to_csv(out_filename, index=False, float_format="%.5f", na_rep="NA")
 ```
 
-1.  The `params` dictionary is passed through from the `setup` method to the
+1. The `params` dictionary is passed through from the `setup` method to the
     `_manipulate_by_scale` method.
-2.  The `param_map` argument is a dictionary that maps the parameter names in the
+2. The `param_map` argument is a dictionary that maps the parameter names in the
     `params` dictionary to the column names in the input file that should be scaled.
-3.  The `ve_scenario_dir` argument is the directory where the input files for the 
+3. The `ve_scenario_dir` argument is the directory where the input files for the
     scaling are stored.
-4.  The `max_thresh` argument is the maximum value that any value in the input file
-    can be scaled to.  This is important to ensure that the scaled values are not too
+4. The `max_thresh` argument is the maximum value that any value in the input file
+    can be scaled to. This is important to ensure that the scaled values are not too
     large or too small.
-5.  The `clip` method is used to ensure that the scaled values are not too large or too
-    small.  This is important to ensure that the scaled values are within the range of
+5. The `clip` method is used to ensure that the scaled values are not too large or too
+    small. This is important to ensure that the scaled values are within the range of
     values that VisionEval is expecting.
 
-If you use this approach, you would not set the `min` and `max` values for the 
-relevant parameter in the exploratory scope definition to 0 and 1, as you would 
-for the mixture model.  Instead, set those limits to the minimum and maximum
-values that you want to use for the scaling factor.  The upper and lower limits
-need not be symmetric around 1.0, as the scaling factor can be used to scale 
+If you use this approach, you would not set the `min` and `max` values for the
+relevant parameter in the exploratory scope definition to 0 and 1, as you would
+for the mixture model. Instead, set those limits to the minimum and maximum
+values that you want to use for the scaling factor. The upper and lower limits
+need not be symmetric around 1.0, as the scaling factor can be used to scale
 values up or down, or both.
 
-``` yaml
+```yaml
+inputs:
     LUDENSITYMIX:
         shortname: Urban Mix Prop
         address: LUDENSITYMIX
@@ -482,21 +483,21 @@ values up or down, or both.
         max: 1.5 # (3)!
 ```
 
-1.  The `dtype` is set to `float` to indicate that this is a continuous input, 
+1. The `dtype` is set to `float` to indicate that this is a continuous input,
     which can take on a range of values.
-2.  The `min` value for scaling factor can be any value.  Positive values less
+2. The `min` value for scaling factor can be any value. Positive values less
     than or equal to 1.0 are most common, but negative values are also allowable,
     if the signs on the targeted values might be inverted.
-3.  The `max` value for the scaling factor can be any value.  Positive values
+3. The `max` value for the scaling factor can be any value. Positive values
     greater than or equal to 1.0 are most common.
 
-The function `__manipulate_by_scale` written above also implies that the input 
+The function `__manipulate_by_scale` written above also implies that the input
 files on which the scaling factor are applied are in the scenario directory, not
-a subdirectory of the scenario directory, as was the case in mixture models.  
+a subdirectory of the scenario directory, as was the case in mixture models.\
 This is because the scaling factor method is applied to a single set of inputs,
 so there's no need to have multiple subdirectories for the input files.
 
-``` tree    
+```tree
 Scenario-Inputs/
     OTP/
         ANOTHER_PARAMETER/
@@ -507,12 +508,12 @@ Scenario-Inputs/
 
 ### Additive Data Tables
 
-Forthcoming: documentation of the `_manipulate_by_delta` method, which allows 
+Forthcoming: documentation of the `_manipulate_by_delta` method, which allows
 mixtures based on additive deltas instead of linear interpolation.
 
 ### Template Injection
 
-Forthcoming: documentation of the template injection method, which writes 
+Forthcoming: documentation of the template injection method, which writes
 parameter values directly into the input files based on a template.
 
 ### Direct Injection
@@ -524,79 +525,77 @@ parameter values directly into the input files, overwriting existing values.
 
 Forthcoming: documentation of how to define custom methods for preparing input files.
 
-
 ## Running an Experiment
 
-Once the input files have been prepared, the VisionEval model can be run.  The
+Once the input files have been prepared, the VisionEval model can be run. The
 `FilesCoreModel` interface defines the `run` method as the place to run the VisionEval
 model. The `run` method needs to be overloaded in a subclass of `FilesCoreModel` to define
 the specific steps needed to run the VisionEval model.
 
 In this example, the main thing we do in the `run` method is to set the `path` environment
-variable to include the path to the R executable, and then run s small script 
+variable to include the path to the R executable, and then run s small script
 that opens the VisionEval model and runs it with the desired inputs.
 
-``` python
+```python
 class VEModel(FilesCoreModel):
     ...
-    def run(self): # (1)!
-        os.environ['path'] = (
-            join_norm(self.config['r_executable'])+';'+os.environ['path']   
+
+    def run(self):  # (1)!
+        os.environ["path"] = (
+            join_norm(self.config["r_executable"]) + ";" + os.environ["path"]
         )
-        cmd = 'Rscript'
-    
+        cmd = "Rscript"
+
         # write a small script that opens the model and runs it
         with open(join_norm(self.local_directory, "vemodel_runner.R"), "wt") as script:
             script.write(f"""
             thismodel <- openModel("{r_join_norm(self.local_directory, self.modelname)}")
             thismodel$run("reset")
             """)
-    
-        self.last_run_result = subprocess.run( # (2)!
-            [cmd, 'vemodel_runner.R'],
+
+        self.last_run_result = subprocess.run(  # (2)!
+            [cmd, "vemodel_runner.R"],
             cwd=self.local_directory,
             capture_output=True,
         )
-            
-``` 
+```
 
-1.  The `run` method accepts no arguments. All the information needed to run the
+1. The `run` method accepts no arguments. All the information needed to run the
     experiment is stored in files written during the `setup` method.
-2.  The subprocess.run command runs a command line tool. The
+2. The subprocess.run command runs a command line tool. The
     name of the command line tool, plus all the command line arguments
     for the tool, are given as a list of strings, not one string.
     The `cwd` argument sets the current working directory from which the
-    command line tool is launched.  Setting `capture_output` to True
+    command line tool is launched. Setting `capture_output` to True
     will capture both stdout and stderr from the command line tool, and
     make these available in the result object to facilitate debugging.
-
 
 ## Extracting Results
 
 Once the VisionEval model has been run, the output files need to be collected and
-parsed to extract the performance measures that quantify the results of the 
-experiment.  The `FilesCoreModel` interface defines some standardized data extraction 
-processes that can be configured entirely in the exploratory scope (i.e. the YAML 
+parsed to extract the performance measures that quantify the results of the
+experiment. The `FilesCoreModel` interface defines some standardized data extraction
+processes that can be configured entirely in the exploratory scope (i.e. the YAML
 config file), so it may not be necessary to write Python code to extract the results.
 
 Each performance measure that is to be extracted from the output files of the VisionEval
-model is defined in the exploratory scope definition, under the `outputs` section.  Each
+model is defined in the exploratory scope definition, under the `outputs` section. Each
 output is defined by a unique name, and the `parser` section of the output definition
-defines how to extract the performance measure from the output files.  The `parser`
+defines how to extract the performance measure from the output files. The `parser`
 section can include a `file` argument, which is the name of the output file from which
-the performance measure is to be extracted. It can also include a `loc` or an `iloc` argument, 
+the performance measure is to be extracted. It can also include a `loc` or an `iloc` argument,
 which is the location in the output file where the performance measure is to be found.
-These locations correlate with the `pandas.DataFrame` accessors `loc` and `iloc`, 
-respectively.  For the `loc` argument, file is read in as a `pandas.DataFrame`, with the
+These locations correlate with the `pandas.DataFrame` accessors `loc` and `iloc`,
+respectively. For the `loc` argument, file is read in as a `pandas.DataFrame`, with the
 first row as the column names, and the first column as the index, and the performance
-measure is extracted by selecting the row & column with the labels that match the 
-value of the `loc` argument.  For the `iloc` argument, the performance measure is
+measure is extracted by selecting the row & column with the labels that match the
+value of the `loc` argument. For the `iloc` argument, the performance measure is
 extracted by selecting the row & column with the integer positions that match the
 value of the `iloc` argument.
 
-Since most 
+Since most
 
-``` yaml
+```yaml
 outputs:
     HouseholdDvmtPerHh:
         kind: info
@@ -608,14 +607,14 @@ outputs:
 ```
 
 Since most VisionEval output files are in CSV format, this simple parsing will
-be sufficient for most cases.  However, if the desired performance measures is 
+be sufficient for most cases. However, if the desired performance measures is
 not directly available as a scalar value in an output files, there is also an
 `eval` parser that can be used to evaluate a Python expression that computes
-the desired result.  For example, this parser will compute the difference between
+the desired result. For example, this parser will compute the difference between
 the 2010 and 2038 values of the `UrbanHhCO2e` values, and report the difference
 as the performance measure.
 
-``` yaml
+```yaml
 outputs:
     UrbanHhCO2eReduction:
         shortname: Cars GHG Reduction
@@ -629,11 +628,11 @@ outputs:
             eval: loc['UrbanHhCO2e','2010'] - loc['UrbanHhCO2e','2038']
 ```
 
-For more complex parsing and analysis, you can define a custom Python function 
-to compute arbitrarily complex performance measures.  In the example repository,
-the Oregon VE State model has a [custom parser](https://github.com/tmip-emat/ve-integration/blob/359232a1a4d562dcb3db03601a3807506a726673/extract_outputs.R#L1) 
-written in R that computes a number of performance measures.  This R script is
-called as a subprocess from the [`post_process`](https://github.com/tmip-emat/ve-integration/blob/359232a1a4d562dcb3db03601a3807506a726673/emat_ve_wrapper.py#L957) 
-method of the `FilesCoreModel` subclass.  The built-in parser described above is 
-then used to extract the performance measures from the output of the R 
+For more complex parsing and analysis, you can define a custom Python function
+to compute arbitrarily complex performance measures. In the example repository,
+the Oregon VE State model has a [custom parser](https://github.com/tmip-emat/ve-integration/blob/359232a1a4d562dcb3db03601a3807506a726673/extract_outputs.R#L1)
+written in R that computes a number of performance measures. This R script is
+called as a subprocess from the [`post_process`](https://github.com/tmip-emat/ve-integration/blob/359232a1a4d562dcb3db03601a3807506a726673/emat_ve_wrapper.py#L957)
+method of the `FilesCoreModel` subclass. The built-in parser described above is
+then used to extract the performance measures from the output of the R
 post-processing script.

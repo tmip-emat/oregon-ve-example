@@ -569,3 +569,71 @@ class VEModel(FilesCoreModel):
     command line tool is launched.  Setting `capture_output` to True
     will capture both stdout and stderr from the command line tool, and
     make these available in the result object to facilitate debugging.
+
+
+## Extracting Results
+
+Once the VisionEval model has been run, the output files need to be collected and
+parsed to extract the performance measures that quantify the results of the 
+experiment.  The `FilesCoreModel` interface defines some standardized data extraction 
+processes that can be configured entirely in the exploratory scope (i.e. the YAML 
+config file), so it may not be necessary to write Python code to extract the results.
+
+Each performance measure that is to be extracted from the output files of the VisionEval
+model is defined in the exploratory scope definition, under the `outputs` section.  Each
+output is defined by a unique name, and the `parser` section of the output definition
+defines how to extract the performance measure from the output files.  The `parser`
+section can include a `file` argument, which is the name of the output file from which
+the performance measure is to be extracted. It can also include a `loc` or an `iloc` argument, 
+which is the location in the output file where the performance measure is to be found.
+These locations correlate with the `pandas.DataFrame` accessors `loc` and `iloc`, 
+respectively.  For the `loc` argument, file is read in as a `pandas.DataFrame`, with the
+first row as the column names, and the first column as the index, and the performance
+measure is extracted by selecting the row & column with the labels that match the 
+value of the `loc` argument.  For the `iloc` argument, the performance measure is
+extracted by selecting the row & column with the integer positions that match the
+value of the `iloc` argument.
+
+Since most 
+
+``` yaml
+outputs:
+    HouseholdDvmtPerHh:
+        kind: info
+        desc: Average daily vehicle miles traveled by households in 2050
+        metamodeltype: linear
+        parser:
+            file: state_validation_measures.csv
+            loc: [HouseholdDvmtPerHh, 2050]
+```
+
+Since most VisionEval output files are in CSV format, this simple parsing will
+be sufficient for most cases.  However, if the desired performance measures is 
+not directly available as a scalar value in an output files, there is also an
+`eval` parser that can be used to evaluate a Python expression that computes
+the desired result.  For example, this parser will compute the difference between
+the 2010 and 2038 values of the `UrbanHhCO2e` values, and report the difference
+as the performance measure.
+
+``` yaml
+outputs:
+    UrbanHhCO2eReduction:
+        shortname: Cars GHG Reduction
+        kind: info
+        desc: Reduction from 2010 level in average annual production of greenhouse gas emissions from light-duty
+            vehicle travel by households residing in the urban area
+        transform: none
+        metamodeltype: linear
+        parser:
+            file: Measures_VERSPM_2010,2038_Marea=RVMPO.csv
+            eval: loc['UrbanHhCO2e','2010'] - loc['UrbanHhCO2e','2038']
+```
+
+For more complex parsing and analysis, you can define a custom Python function 
+to compute arbitrarily complex performance measures.  In the example repository,
+the Oregon VE State model has a [custom parser](https://github.com/tmip-emat/ve-integration/blob/359232a1a4d562dcb3db03601a3807506a726673/extract_outputs.R#L1) 
+written in R that computes a number of performance measures.  This R script is
+called as a subprocess from the [`post_process`](https://github.com/tmip-emat/ve-integration/blob/359232a1a4d562dcb3db03601a3807506a726673/emat_ve_wrapper.py#L957) 
+method of the `FilesCoreModel` subclass.  The built-in parser described above is 
+then used to extract the performance measures from the output of the R 
+post-processing script.

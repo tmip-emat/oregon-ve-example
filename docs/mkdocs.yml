@@ -1,7 +1,7 @@
 site_name: TMIP-EMAT + VisionEval
 docs_dir: content
-repo_url: http://github.com/driftlesslabs/emat-ve
-repo_name: driftlesslabs/emat-ve
+repo_url: http://github.com/tmip-emat/ve-integration
+repo_name: tmip-emat/ve-integration
 theme:
   name: material
   features:

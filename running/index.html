@@ -1,0 +1,1224 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../scoping/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Running Experiments - TMIP-EMAT + VisionEval</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_markdown_exec_pyodide.css">
+    
+      <link rel="stylesheet" href="../assets/_markdown_exec_ansi.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#running-experiments" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="TMIP-EMAT + VisionEval" class="md-header__button md-logo" aria-label="TMIP-EMAT + VisionEval" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            TMIP-EMAT + VisionEval
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Running Experiments
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="http://github.com/tmip-emat/ve-integration" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    tmip-emat/ve-integration
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="TMIP-EMAT + VisionEval" class="md-nav__button md-logo" aria-label="TMIP-EMAT + VisionEval" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    TMIP-EMAT + VisionEval
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="http://github.com/tmip-emat/ve-integration" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    tmip-emat/ve-integration
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scoping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Exploratory Scoping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Running Experiments
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Running Experiments
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-an-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting Up an Experiment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting Up an Experiment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#categorical-drop-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      Categorical Drop-In
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mixture-of-data-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mixture of Data Tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaling-data-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scaling Data Tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additive-data-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additive Data Tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template Injection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Direct Injection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Methods
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-an-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running an Experiment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extracting-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extracting Results
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-an-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting Up an Experiment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting Up an Experiment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#categorical-drop-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      Categorical Drop-In
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mixture-of-data-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mixture of Data Tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaling-data-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scaling Data Tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additive-data-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additive Data Tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Template Injection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Direct Injection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Methods
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-an-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running an Experiment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extracting-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extracting Results
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="running-experiments">Running Experiments</h1>
+<div class="admonition abstract">
+<p class="admonition-title">tl;dr</p>
+<p>When you run a VisionEval model, it takes a bunch of files as input, it does
+some stuff, and then it gives you a bunch of files as output.
+To run an experiment from EMAT, we need to set up the input files to reflect
+the values of policy levers and exogenous uncertainties for that experiment,
+run VisionEval model to get the outputs, then extract whatever performance
+measures we want from those outputs and feed them back to EMAT.</p>
+</div>
+<p>The idea behind EMAT is to run a number of experiments, and then analyze the
+results of those experiments. The number of experiments that needs to be run
+is a function of the level of complexity of the EMAT scope, but in general it
+is more experiments that a user would want to run manually. Thus, the EMAT
+toolset is designed to automate the process of running experiments.</p>
+<p>When working with VisionEval, at least as defined in this demonstration repository,
+we will be treating the VisionEval model as a "files-based core model". Doing so
+requires a few steps for each experiment:</p>
+<ul>
+<li>Prepare the input files for the VisionEval model, based on the values of policy
+    levers and exogenous uncertainties defined for the experiment.</li>
+<li>Run the VisionEval model, using the input files that have been prepared.</li>
+<li>(Optional) Run any post-processing steps that are needed to extract the results
+    of the experiment from the output files of the VisionEval model.</li>
+<li>Collect the output files from the VisionEval model and parse then to extract the
+    results of the experiment.</li>
+</ul>
+<p>Each of these steps is encapsulated in a Python function that is part of the
+<a href="https://tmip-emat.github.io/source/emat.models/files-api.html"><code>FilesCoreModel</code></a>
+interface. In the implementation code, you will see a class that is a subclass of
+<code>FilesCoreModel</code>, and that class will define the specific steps needed to prepare
+the input files, run the model, and extract the results.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">emat.model.core_files</span> <span class="kn">import</span> <span class="n">FilesCoreModel</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">class</span> <span class="nc">VEModel</span><span class="p">(</span><span class="n">FilesCoreModel</span><span class="p">):</span>  <span class="c1"># (1)!</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">    A class for using Vision Eval as a files core model.</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="o">...</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>VEModel</code> class is a subclass of <code>FilesCoreModel</code>, which defines the specific
+    steps needed to prepare the input files, run the model, and extract the results.</li>
+</ol>
+<p>You can see some examples of the <code>FilesCoreModel</code> interface <a href="https://github.com/tmip-emat/tmip-emat-ve/blob/1f62205652d26389d1767a2cdb0ba1fabe057dea/emat_verspm.py#L36">here</a>
+and <a href="https://github.com/tmip-emat/ve-integration/blob/ff9e83fdc5adf4414dd9454dd980d6f32464bf09/emat_ve_wrapper.py#L40">here</a>.
+The process for creating a new analysis with EMAT and VisionEval includes creating
+a similar class that is a subclass of <code>FilesCoreModel</code>, and then defining the specific
+methods needed to carry out the steps of the integration. This can be done from
+scratch, or by copying and modifying an existing example.</p>
+<h2 id="setting-up-an-experiment">Setting Up an Experiment</h2>
+<p>Each experiment involves making a complete copy of the VisionEval model in a contained
+environment, and then modifying the input files for that copy of the VisionEval model
+to reflect the specific values of policy levers and exogenous uncertainties for that
+experiment. The <code>FilesCoreModel</code> interface defines the <code>setup</code> method as the place to
+create a new copy of the VisionEval model in a contained environment, and then modify
+the input files for that copy of the VisionEval model. The <code>setup</code> method needs to be
+overloaded in a subclass of <code>FilesCoreModel</code> to define the specific steps needed to
+modify the input files for the experiment.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span> <span class="nc">VEModel</span><span class="p">(</span><span class="n">FilesCoreModel</span><span class="p">):</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="o">...</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>  <span class="c1"># (1)!</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="sd">        Configure the core model with the experiment variable values.</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="sd">        Args:</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="sd">            params (dict):</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="sd">                experiment variables including both exogenous</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="sd">                uncertainty and policy levers</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="sd">        Raises:</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="sd">            KeyError:</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="sd">                if a defined experiment variable is not supported</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="sd">                by the core model</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="sd">        &quot;&quot;&quot;</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>setup</code> method accepts a dictionary of parameters, which includes the values of
+    policy levers and exogenous uncertainties for the experiment.</li>
+</ol>
+<p>Within the <code>setup</code> method, the subclass of <code>FilesCoreModel</code> will need to make a complete
+copy of the VisionEval model in a contained environment, and then modify the input files
+for that copy of the VisionEval model to reflect the specific values of policy levers and
+exogenous uncertainties for that experiment.</p>
+<p>There are numerous possible ways to prepare the input files for the VisionEval model,
+depending on the exploratory scope and the types of inputs that need to be modified.
+This demo repository includes a few different examples of how to prepare input files
+based on the scope:</p>
+<ul>
+<li><a href="#categorical-drop-in">Categorical Drop-In</a></li>
+<li><a href="#mixture-of-data-tables">Mixture of Data Tables</a></li>
+<li><a href="#scaling-data-tables">Scaling Data Tables</a></li>
+<li><a href="#additive-data-tables">Additive Data Tables</a></li>
+<li><a href="#template-injection">Template Injection</a></li>
+<li><a href="#direct-injection">Direct Injection</a></li>
+<li><a href="#custom-methods">Custom Methods</a></li>
+</ul>
+<p>Each of these methods can be implemented in a bespoke manner for each specific
+input parameter (both policy levers and exogenous uncertainties), or you can use
+generic methods that can be applied to a wide range of input parameters. The generic
+approach is shown in the example repositories.</p>
+<h3 id="categorical-drop-in">Categorical Drop-In</h3>
+<p>Many of the input files for VisionEval are in the form of CSV files. The simplest way
+to actuate a change in the input files is to simply select an entire file that has the
+desired values, and copy that file into the requisite input location. This is limited
+to categorical inputs, which are inputs that can be represented as discrete categorical
+values. For example, you may have two different population projections, one that
+represents scenario "A" where a particular brownfield area is cleaned up
+and developed, and another that represents scenario "B" where the brownfield
+is left as is. Under this policy lever, it doesn't make sense to have an intermediate
+value ("we'll just clean up part of the toxic waste, and let only few people move in").</p>
+<p>An advantage of this method is that it is simple to implement, and it places no
+limits on the format of the input files. There is no need to have a specific format
+or a matching number of rows or columns in the input files. In the population projection
+example considered above, the input files for the two scenarios could have different
+numbers of rows as one of the two scenarios could imply a different zonal structure
+within the region.</p>
+<p>In this example repository, this approach is called the "categorical drop-in" method.\
+The VisionEval model will either use the inputs file "A" or the inputs file "B",
+but not a mix of the two. This is expressed in the code by the <code>categorical_drop_in</code>
+method, which is a method of the <code>FilesCoreModel</code>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span> <span class="nf">_manipulate_by_categorical_drop_in</span><span class="p">(</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>  <span class="c1"># (1)!</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">cat_param</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="c1"># (2)!</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">ve_scenario_dir</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span>  <span class="c1"># (3)!</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">):</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="n">scenario_dir</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cat_param</span><span class="p">]</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">scenario_input</span><span class="p">(</span><span class="n">ve_scenario_dir</span><span class="p">,</span> <span class="n">scenario_dir</span><span class="p">)):</span>  <span class="c1"># (4)!</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>                <span class="n">scenario_input</span><span class="p">(</span><span class="n">ve_scenario_dir</span><span class="p">,</span> <span class="n">scenario_dir</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>                <span class="n">join_norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resolved_model_path</span><span class="p">,</span> <span class="s2">&quot;inputs&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>            <span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>params</code> dictionary is passed through to the <code>_manipulate_by_categorical_drop_in</code>
+    method. This dictionary includes the values of all the policy levers and exogenous
+    uncertainties for the experiment.</li>
+<li>The <code>cat_param</code> argument is the name of the parameter in the <code>params</code> dictionary that
+    is the categorical drop-in.</li>
+<li>The <code>ve_scenario_dir</code> argument is the directory where the categorical input files for
+    the categorical drop-in are stored.</li>
+<li>The <code>_manipulate_by_categorical_drop_in</code> method will scan the appropriate directory\
+    where the categorical input files are stored, and copy the input files for the selected
+    categorical value into the requisite input location for the VisionEval model.</li>
+</ol>
+<p>This method is in turn called from individual <code>setup</code> sub-methods, which will
+define the specific input parameters that are categorical drop-ins. For example,
+the <code>_manipulate_carsvcavail</code> method can define the specific input parameters that are
+categorical drop-ins for car service availability inputs.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span> <span class="nf">_manipulate_carsvcavail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manipulate_by_categorical_drop_in</span><span class="p">(</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="n">params</span><span class="p">,</span>  <span class="c1"># (1)!</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>        <span class="s2">&quot;CARSVCAVAILSCEN&quot;</span><span class="p">,</span>  <span class="c1"># (2)!</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_input_dirs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CARSVCAVAILSCEN&quot;</span><span class="p">),</span>  <span class="c1"># (3)!</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>params</code> dictionary is passed through to the
+    <code>_manipulate_by_categorical_drop_in</code> method.</li>
+<li>The second argument to the <code>_manipulate_by_categorical_drop_in</code> method is the
+    name of the parameter in the <code>params</code> dictionary that is the categorical drop-in,
+    in this case the <code>CARSVCAVAILSCEN</code> parameter.</li>
+<li>The third argument to the <code>_manipulate_by_categorical_drop_in</code> method is the
+    directory where the categorical input files for the categorical drop-in are
+    stored.</li>
+</ol>
+<p>You will find this function mirrored in the EMAT exploratory scope definition,
+where the categorical drop-in is defined as an uncertainty.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">inputs</span><span class="p">:</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">CARSVCAVAILSCEN</span><span class="p">:</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">shortname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Car Service Availability</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CARSVCAVAILSCEN</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">ptype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exogenous uncertainty</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cat</span><span class="w"> </span><span class="c1"># (1)!</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Different levels of car service availability</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mid</span><span class="w"> </span><span class="c1"># (2)!</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="c1"># (3)!</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">low</span><span class="w">    </span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mid</span><span class="w">    </span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span><span class="w">   </span>
+</span></code></pre></div>
+<ol>
+<li>The <code>dtype</code> is set to <code>cat</code> to indicate that this is a categorical input,
+    which can only take on one of a discrete set of values.</li>
+<li>The <code>default</code> value is set to <code>mid</code>, which will be the selected value for
+    this parameter if no other value is specified.</li>
+<li>The <code>values</code> list defines the discrete set of values that this parameter can
+    take on. These should be strings, so that we can match against sub-directory
+    names in the <code>Scenario-Inputs</code> directory of the VisionEval model.</li>
+</ol>
+<p>This structure also requires each categorical drop-in to have a corresponding
+directory in the <code>inputs</code> directory of the VisionEval model, where the input file(s)
+for each categorical drop-in are stored. Note that there is a directory matching
+each categorical value, and within that directory are the input files that are
+to be used when that categorical value is selected. Generally, the names of the
+input files will be the same across all categorical values, as shown here.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>📁<span class="w"> </span>Scenario-Inputs/
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>└──<span class="w"> </span>📁<span class="w"> </span>OTP/
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>├──<span class="w"> </span>📁<span class="w"> </span>ANOTHER_PARAMETER/
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>├──<span class="w"> </span>📁<span class="w"> </span>CARSVCAVAILSCEN/
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>📁<span class="w"> </span>low/
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>📄<span class="w"> </span>marea_carsvc_availability.csv
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>📁<span class="w"> </span>mid/
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span>│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>📄<span class="w"> </span>marea_carsvc_availability.csv
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span>📁<span class="w"> </span>high/
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>📄<span class="w"> </span>marea_carsvc_availability.csv
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span>└──<span class="w"> </span>📁<span class="w"> </span>OTHER_PARAMETER/
+</span></code></pre></div>
+<h3 id="mixture-of-data-tables">Mixture of Data Tables</h3>
+<p>In contrast to the categorical drop-in method, the "mixture of data tables" method
+allows for creating "intermediate" input files that are a mix of different input files.
+The approach is suitable for continuous inputs, which are inputs that can take on a
+range of values. For example, you may have a land use density projection that has
+upper and lower bounds, and you want to explore the effects of different levels of
+density between those limits.</p>
+<p>An advantage of this method is that it allows for a more fine-grained exploration of
+the input space, and it can be used for continuous inputs. However, it does require
+that the input files have a specific format (a CSV table containing primarily numeric
+data), and that the number of rows and columns in the input files match across both
+the input files, which are labeled as "1" and "2" in this example.</p>
+<p>Instead of copying an entire file, the mixture of data tables method will read in
+both input files, and then linearly interpolate between the two input files based
+on the value of the policy lever or exogenous uncertainty. This is expressed in the
+code by the <code>_manipulate_by_mixture</code> method, which is a method of the <code>FilesCoreModel</code>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span> <span class="nf">_manipulate_by_mixture</span><span class="p">(</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">params</span><span class="p">,</span>  <span class="c1"># (1)!</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">weight_param</span><span class="p">,</span>  <span class="c1"># (2)!</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">ve_scenario_dir</span><span class="p">,</span>  <span class="c1"># (3)!</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">no_mix_cols</span><span class="o">=</span><span class="p">(</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="s2">&quot;Year&quot;</span><span class="p">,</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="s2">&quot;Geo&quot;</span><span class="p">,</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="p">),</span>  <span class="c1"># (4)!</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">float_dtypes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># (5)!</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">):</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    <span class="n">weight_2</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">weight_param</span><span class="p">]</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>    <span class="n">weight_1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">weight_2</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="c1"># Gather list of all files in directory &quot;1&quot;, and confirm they</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    <span class="c1"># are also in directory &quot;2&quot;</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    <span class="n">filenames</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">scenario_input</span><span class="p">(</span><span class="n">ve_scenario_dir</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">)):</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>            <span class="n">filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>            <span class="n">f2</span> <span class="o">=</span> <span class="n">scenario_input</span><span class="p">(</span><span class="n">ve_scenario_dir</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">f2</span><span class="p">):</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>        <span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">scenario_input</span><span class="p">(</span><span class="n">ve_scenario_dir</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>        <span class="n">isna_</span> <span class="o">=</span> <span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>        <span class="n">df1</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># (6)!</span>
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>        <span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">scenario_input</span><span class="p">(</span><span class="n">ve_scenario_dir</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>        <span class="n">df2</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>
+</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>        <span class="n">float_mix_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</span><span id="__span-5-33"><a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>        <span class="k">if</span> <span class="n">float_dtypes</span><span class="p">:</span>
+</span><span id="__span-5-34"><a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>            <span class="n">float_mix_cols</span> <span class="o">=</span> <span class="n">float_mix_cols</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="s2">&quot;int&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</span><span id="__span-5-35"><a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">no_mix_cols</span><span class="p">:</span>
+</span><span id="__span-5-36"><a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>            <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">float_mix_cols</span><span class="p">:</span>
+</span><span id="__span-5-37"><a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>                <span class="n">float_mix_cols</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</span><span id="__span-5-38"><a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a>
+</span><span id="__span-5-39"><a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>        <span class="k">if</span> <span class="n">float_mix_cols</span><span class="p">:</span>
+</span><span id="__span-5-40"><a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a>            <span class="n">df1_float</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[</span><span class="n">float_mix_cols</span><span class="p">]</span>
+</span><span id="__span-5-41"><a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>            <span class="n">df2_float</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="n">float_mix_cols</span><span class="p">]</span>
+</span><span id="__span-5-42"><a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>            <span class="n">df1</span><span class="p">[</span><span class="n">float_mix_cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">df1_float</span> <span class="o">*</span> <span class="n">weight_1</span> <span class="o">+</span> <span class="n">df2_float</span> <span class="o">*</span> <span class="n">weight_2</span>
+</span><span id="__span-5-43"><a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>
+</span><span id="__span-5-44"><a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>        <span class="n">int_mix_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="s2">&quot;int&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</span><span id="__span-5-45"><a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>        <span class="k">if</span> <span class="n">float_dtypes</span><span class="p">:</span>
+</span><span id="__span-5-46"><a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a>            <span class="n">int_mix_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+</span><span id="__span-5-47"><a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a>        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">no_mix_cols</span><span class="p">:</span>
+</span><span id="__span-5-48"><a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a>            <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">int_mix_cols</span><span class="p">:</span>
+</span><span id="__span-5-49"><a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a>                <span class="n">int_mix_cols</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+</span><span id="__span-5-50"><a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a>
+</span><span id="__span-5-51"><a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a>        <span class="k">if</span> <span class="n">int_mix_cols</span><span class="p">:</span>
+</span><span id="__span-5-52"><a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a>            <span class="n">df1_int</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[</span><span class="n">int_mix_cols</span><span class="p">]</span>
+</span><span id="__span-5-53"><a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a>            <span class="n">df2_int</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="n">int_mix_cols</span><span class="p">]</span>
+</span><span id="__span-5-54"><a id="__codelineno-5-54" name="__codelineno-5-54" href="#__codelineno-5-54"></a>            <span class="n">df_int_mix</span> <span class="o">=</span> <span class="n">df1_int</span> <span class="o">*</span> <span class="n">weight_1</span> <span class="o">+</span> <span class="n">df2_int</span> <span class="o">*</span> <span class="n">weight_2</span>
+</span><span id="__span-5-55"><a id="__codelineno-5-55" name="__codelineno-5-55" href="#__codelineno-5-55"></a>            <span class="n">df1</span><span class="p">[</span><span class="n">int_mix_cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">df_int_mix</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># (7)!</span>
+</span><span id="__span-5-56"><a id="__codelineno-5-56" name="__codelineno-5-56" href="#__codelineno-5-56"></a>
+</span><span id="__span-5-57"><a id="__codelineno-5-57" name="__codelineno-5-57" href="#__codelineno-5-57"></a>        <span class="n">out_filename</span> <span class="o">=</span> <span class="n">join_norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resolved_model_path</span><span class="p">,</span> <span class="s2">&quot;inputs&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+</span><span id="__span-5-58"><a id="__codelineno-5-58" name="__codelineno-5-58" href="#__codelineno-5-58"></a>        <span class="k">if</span> <span class="n">isna_</span><span class="p">:</span>
+</span><span id="__span-5-59"><a id="__codelineno-5-59" name="__codelineno-5-59" href="#__codelineno-5-59"></a>            <span class="n">df1</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-5-60"><a id="__codelineno-5-60" name="__codelineno-5-60" href="#__codelineno-5-60"></a>        <span class="n">df1</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">out_filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.5f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">na_rep</span><span class="o">=</span><span class="s2">&quot;NA&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>params</code> dictionary is passed through to the <code>_manipulate_by_mixture</code> method.</li>
+<li>The <code>weight_param</code> argument is the name of the parameter in the <code>params</code> dictionary
+    that is the weight for the mixture of data tables.</li>
+<li>The <code>ve_scenario_dir</code> argument is the directory where the input files for the
+    mixture of data tables are stored. There should be two subdirectories, "1" and "2".</li>
+<li>The <code>no_mix_cols</code> argument is a list of column names that should not be mixed. This
+    is useful for columns that are not numerical, such as year or geography, which should
+    not be mixed (or for which there is no reasonable linear interpolation). These columns
+    will be copied from the input file in directory "1" to the output file.</li>
+<li>The <code>float_dtypes</code> argument is a boolean that indicates whether integer columns
+    should be treated as float columns for the purposes of mixing. Setting this
+    to <code>True</code> will treat integer columns as float columns, and will mix them as such,
+    which can be problematic if VisionEval is expecting integers.</li>
+<li>The <code>isna_</code> variable is set to <code>True</code> if there are any <code>NaN</code> values in the input
+    file. If there are, these will be replaced with zeros for the purposes of mixing,
+    and then replaced with <code>NaN</code> in the output file, as linear interpolation of <code>NaN</code>
+    values is not possible.</li>
+<li>The <code>df_int_mix</code> variable is the linear interpolation of the integer columns, and
+    is optionally rounded to the nearest integer. This is done to ensure that the output file
+    has integer values, which is important if VisionEval is expecting integers.</li>
+</ol>
+<p>This method is in turn called from individual <code>setup</code> sub-methods, which will
+define the specific input parameters that are mixtures of data tables. For example,
+the <a href="https://github.com/tmip-emat/ve-integration/blob/7b41df9c94b2671ccef0fd214593f3629f8337e3/emat_ve_wrapper.py#L534-L544"><code>_manipulate_landuse</code></a>
+method can define the specific input parameters that are
+mixtures of data tables for land use density inputs.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">def</span> <span class="nf">_manipulate_ludensity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manipulate_by_mixture</span><span class="p">(</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>        <span class="n">params</span><span class="p">,</span>  <span class="c1"># (1)!</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>        <span class="s2">&quot;LUDENSITYMIX&quot;</span><span class="p">,</span>  <span class="c1"># (2)!</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_input_dirs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LUDENSITYMIX&quot;</span><span class="p">),</span>  <span class="c1"># (3)!</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>params</code> dictionary is passed through to the
+    <code>__manipulate_by_mixture</code> method.</li>
+<li>The second argument to the <code>_manipulate_by_mixture</code> method is the
+    name of the parameter in the <code>params</code> dictionary that is controlling the,
+    mixture, in this case the <code>LUDENSITYMIX</code> parameter.</li>
+<li>The third argument to the <code>__manipulate_by_mixture</code> method is the
+    directory where the categorical input files for the mixture bounds are
+    stored.</li>
+</ol>
+<p>You will find this function mirrored in the EMAT exploratory
+<a href="https://github.com/tmip-emat/ve-integration/blob/7b41df9c94b2671ccef0fd214593f3629f8337e3/EMAT-VE-Configs/odot-otp-scope.yml#L11-L23">scope definition</a>,
+where the mixture of data tables is defined as an exogenous uncertainty.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">inputs</span><span class="p">:</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="nt">LUDENSITYMIX</span><span class="p">:</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">        </span><span class="nt">shortname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Urban Mix Prop</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">        </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LUDENSITYMIX</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">        </span><span class="nt">ptype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exogenous uncertainty</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">float</span><span class="w"> </span><span class="c1"># (1)!</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Urban proportion for each marea by year</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">        </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"> </span><span class="c1"># (2)!</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"> </span><span class="c1"># (3)!</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>dtype</code> is set to <code>float</code> to indicate that this is a continuous input,
+    which can take on a range of values.</li>
+<li>The <code>min</code> value for mixtures is always set to <code>0</code>, which represents the lower bound for this
+    parameter, and will set the weight of the "1" input file to <code>1.0</code> and the
+    weight of the "2" input file to <code>0.0</code>.</li>
+<li>The <code>max</code> value for mixtures is always set to <code>1</code>, which represents the upper bound for this
+    parameter, and will set the weight of the "1" input file to <code>0.0</code> and the
+    weight of the "2" input file to <code>1.0</code>.</li>
+</ol>
+<p>This structure also requires each mixture to have a corresponding
+directory in the <code>inputs</code> directory of the VisionEval model, where the input file(s)
+for each categorical drop-in are stored. Note that there are exactly two sub-directories
+in this parameters directory, and they are named "1" and "2", and within those two directories
+are the input files that are to be mixed together. The names of the
+input file(s) <em>must</em> be the same across all both sub-directories, as shown here,
+and they must be in the same format (a CSV table containing primarily numeric data).</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>📁<span class="w"> </span>Scenario-Inputs/
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>└──<span class="w"> </span>📁<span class="w"> </span>OTP/
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>├──<span class="w"> </span>📁<span class="w"> </span>ANOTHER_PARAMETER/
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>├──<span class="w"> </span>📁<span class="w"> </span>LUDENSITYMIX/
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>📁<span class="w"> </span><span class="m">1</span>/
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>📄<span class="w"> </span>marea_mix_targets.csv
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span>📁<span class="w"> </span><span class="m">2</span>/
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>📄<span class="w"> </span>marea_mix_targets.csv
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span>└──<span class="w"> </span>📁<span class="w"> </span>OTHER_PARAMETER/
+</span></code></pre></div>
+<h3 id="scaling-data-tables">Scaling Data Tables</h3>
+<p>The scaling data tables method is much like the mixture of data tables method, but
+instead of linearly interpolating between two input files, the scaling data tables
+method will scale all the values in selected columns of an input file up or down based on the
+value of the policy lever or exogenous uncertainty. This is useful for continuous
+inputs that are best represented as a single table, but where the values in that
+table can be scaled up or down. For example, you may have a population projection
+that represents a "baseline" scenario, and you want to explore the effects of
+different levels of population growth.</p>
+<p>The <code>_manipulate_by_scale</code> function shown below can be included in an integration's
+subclass of <code>FilesCoreModel</code>, and used to scale the values in the input files
+based on the value of the policy lever or exogenous uncertainty.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">def</span> <span class="nf">_manipulate_by_scale</span><span class="p">(</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">params</span><span class="p">,</span>  <span class="c1"># (1)!</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">param_map</span><span class="p">,</span>  <span class="c1"># (2)!</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">ve_scenario_dir</span><span class="p">,</span>  <span class="c1"># (3)!</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">max_thresh</span><span class="o">=</span><span class="mf">1e9</span><span class="p">,</span>  <span class="c1"># (4)!</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">):</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="c1"># Gather list of all files in scenario input directory</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="n">filenames</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">scenario_input</span><span class="p">(</span><span class="n">ve_scenario_dir</span><span class="p">)):</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>            <span class="n">filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>        <span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">scenario_input</span><span class="p">(</span><span class="n">ve_scenario_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>        <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">column_names</span> <span class="ow">in</span> <span class="n">param_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column_names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>                <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">column_names</span><span class="p">]</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>            <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">:</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>                <span class="n">df1</span><span class="p">[[</span><span class="n">column_name</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df1</span><span class="p">[[</span><span class="n">column_name</span><span class="p">]]</span> <span class="o">*</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param_name</span><span class="p">))</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>                    <span class="n">lower</span><span class="o">=-</span><span class="n">max_thresh</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="n">max_thresh</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>                <span class="p">)</span>  <span class="c1"># (5)!</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>        <span class="n">out_filename</span> <span class="o">=</span> <span class="n">join_norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resolved_model_path</span><span class="p">,</span> <span class="s2">&quot;inputs&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>        <span class="n">df1</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">out_filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.5f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">na_rep</span><span class="o">=</span><span class="s2">&quot;NA&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>params</code> dictionary is passed through from the <code>setup</code> method to the
+    <code>_manipulate_by_scale</code> method.</li>
+<li>The <code>param_map</code> argument is a dictionary that maps the parameter names in the
+    <code>params</code> dictionary to the column names in the input file that should be scaled.</li>
+<li>The <code>ve_scenario_dir</code> argument is the directory where the input files for the
+    scaling are stored.</li>
+<li>The <code>max_thresh</code> argument is the maximum value that any value in the input file
+    can be scaled to. This is important to ensure that the scaled values are not too
+    large or too small.</li>
+<li>The <code>clip</code> method is used to ensure that the scaled values are not too large or too
+    small. This is important to ensure that the scaled values are within the range of
+    values that VisionEval is expecting.</li>
+</ol>
+<p>If you use this approach, you would not set the <code>min</code> and <code>max</code> values for the
+relevant parameter in the exploratory scope definition to 0 and 1, as you would
+for the mixture model. Instead, set those limits to the minimum and maximum
+values that you want to use for the scaling factor. The upper and lower limits
+need not be symmetric around 1.0, as the scaling factor can be used to scale
+values up or down, or both.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">inputs</span><span class="p">:</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="nt">LUDENSITYMIX</span><span class="p">:</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">        </span><span class="nt">shortname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Urban Mix Prop</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">        </span><span class="nt">address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LUDENSITYMIX</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">        </span><span class="nt">ptype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exogenous uncertainty</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">        </span><span class="nt">dtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">float</span><span class="w"> </span><span class="c1"># (1)!</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">        </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Urban proportion for each marea by year</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">        </span><span class="nt">min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.75</span><span class="w"> </span><span class="c1"># (2)!</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">        </span><span class="nt">max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.5</span><span class="w"> </span><span class="c1"># (3)!</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>dtype</code> is set to <code>float</code> to indicate that this is a continuous input,
+    which can take on a range of values.</li>
+<li>The <code>min</code> value for scaling factor can be any value. Positive values less
+    than or equal to 1.0 are most common, but negative values are also allowable,
+    if the signs on the targeted values might be inverted.</li>
+<li>The <code>max</code> value for the scaling factor can be any value. Positive values
+    greater than or equal to 1.0 are most common.</li>
+</ol>
+<p>The function <code>__manipulate_by_scale</code> written above also implies that the input
+files on which the scaling factor are applied are in the scenario directory, not
+a subdirectory of the scenario directory, as was the case in mixture models.\
+This is because the scaling factor method is applied to a single set of inputs,
+so there's no need to have multiple subdirectories for the input files.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>📁<span class="w"> </span>Scenario-Inputs/
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>└──<span class="w"> </span>📁<span class="w"> </span>OTP/
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>├──<span class="w"> </span>📁<span class="w"> </span>ANOTHER_PARAMETER/
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span>├──<span class="w"> </span>📁<span class="w"> </span>LUDENSITYMIX/
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span>📄<span class="w"> </span>marea_mix_targets.csv
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>└──<span class="w"> </span>📁<span class="w"> </span>OTHER_PARAMETER/
+</span></code></pre></div>
+<h3 id="additive-data-tables">Additive Data Tables</h3>
+<p>Forthcoming: documentation of the <code>_manipulate_by_delta</code> method, which allows
+mixtures based on additive deltas instead of linear interpolation.</p>
+<h3 id="template-injection">Template Injection</h3>
+<p>Forthcoming: documentation of the template injection method, which writes
+parameter values directly into the input files based on a template.</p>
+<h3 id="direct-injection">Direct Injection</h3>
+<p>Forthcoming: documentation of the direct injection method, which writes
+parameter values directly into the input files, overwriting existing values.</p>
+<h3 id="custom-methods">Custom Methods</h3>
+<p>Forthcoming: documentation of how to define custom methods for preparing input files.</p>
+<h2 id="running-an-experiment">Running an Experiment</h2>
+<p>Once the input files have been prepared, the VisionEval model can be run. The
+<code>FilesCoreModel</code> interface defines the <code>run</code> method as the place to run the VisionEval
+model. The <code>run</code> method needs to be overloaded in a subclass of <code>FilesCoreModel</code> to define
+the specific steps needed to run the VisionEval model.</p>
+<p>In this example, the main thing we do in the <code>run</code> method is to set the <code>path</code> environment
+variable to include the path to the R executable, and then run s small script
+that opens the VisionEval model and runs it with the desired inputs.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">class</span> <span class="nc">VEModel</span><span class="p">(</span><span class="n">FilesCoreModel</span><span class="p">):</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="o">...</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># (1)!</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>            <span class="n">join_norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;r_executable&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>        <span class="p">)</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>        <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;Rscript&quot;</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>        <span class="c1"># write a small script that opens the model and runs it</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join_norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_directory</span><span class="p">,</span> <span class="s2">&quot;vemodel_runner.R&quot;</span><span class="p">),</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">script</span><span class="p">:</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>            <span class="n">script</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="s2">            thismodel &lt;- openModel(&quot;</span><span class="si">{</span><span class="n">r_join_norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_directory</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">modelname</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;)</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="s2">            thismodel$run(&quot;reset&quot;)</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="s2">            &quot;&quot;&quot;</span><span class="p">)</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">last_run_result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># (2)!</span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>            <span class="p">[</span><span class="n">cmd</span><span class="p">,</span> <span class="s2">&quot;vemodel_runner.R&quot;</span><span class="p">],</span>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>            <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_directory</span><span class="p">,</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>            <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>        <span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>The <code>run</code> method accepts no arguments. All the information needed to run the
+    experiment is stored in files written during the <code>setup</code> method.</li>
+<li>The subprocess.run command runs a command line tool. The
+    name of the command line tool, plus all the command line arguments
+    for the tool, are given as a list of strings, not one string.
+    The <code>cwd</code> argument sets the current working directory from which the
+    command line tool is launched. Setting <code>capture_output</code> to True
+    will capture both stdout and stderr from the command line tool, and
+    make these available in the result object to facilitate debugging.</li>
+</ol>
+<h2 id="extracting-results">Extracting Results</h2>
+<p>Once the VisionEval model has been run, the output files need to be collected and
+parsed to extract the performance measures that quantify the results of the
+experiment. The <code>FilesCoreModel</code> interface defines some standardized data extraction
+processes that can be configured entirely in the exploratory scope (i.e. the YAML
+config file), so it may not be necessary to write Python code to extract the results.</p>
+<p>Each performance measure that is to be extracted from the output files of the VisionEval
+model is defined in the exploratory scope definition, under the <code>outputs</code> section. Each
+output is defined by a unique name, and the <code>parser</code> section of the output definition
+defines how to extract the performance measure from the output files. The <code>parser</code>
+section can include a <code>file</code> argument, which is the name of the output file from which
+the performance measure is to be extracted. It can also include a <code>loc</code> or an <code>iloc</code> argument,
+which is the location in the output file where the performance measure is to be found.
+These locations correlate with the <code>pandas.DataFrame</code> accessors <code>loc</code> and <code>iloc</code>,
+respectively. For the <code>loc</code> argument, file is read in as a <code>pandas.DataFrame</code>, with the
+first row as the column names, and the first column as the index, and the performance
+measure is extracted by selecting the row &amp; column with the labels that match the
+value of the <code>loc</code> argument. For the <code>iloc</code> argument, the performance measure is
+extracted by selecting the row &amp; column with the integer positions that match the
+value of the <code>iloc</code> argument.</p>
+<p>Since most</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">outputs</span><span class="p">:</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="nt">HouseholdDvmtPerHh</span><span class="p">:</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">info</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">        </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Average daily vehicle miles traveled by households in 2050</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">        </span><span class="nt">metamodeltype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linear</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">        </span><span class="nt">parser</span><span class="p">:</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">            </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state_validation_measures.csv</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">            </span><span class="nt">loc</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">HouseholdDvmtPerHh</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">2050</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
+<p>Since most VisionEval output files are in CSV format, this simple parsing will
+be sufficient for most cases. However, if the desired performance measures is
+not directly available as a scalar value in an output files, there is also an
+<code>eval</code> parser that can be used to evaluate a Python expression that computes
+the desired result. For example, this parser will compute the difference between
+the 2010 and 2038 values of the <code>UrbanHhCO2e</code> values, and report the difference
+as the performance measure.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">outputs</span><span class="p">:</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="nt">UrbanHhCO2eReduction</span><span class="p">:</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">        </span><span class="nt">shortname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cars GHG Reduction</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">        </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">info</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Reduction from 2010 level in average annual production of greenhouse gas emissions from light-duty</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">vehicle travel by households residing in the urban area</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">        </span><span class="nt">transform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">        </span><span class="nt">metamodeltype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linear</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">        </span><span class="nt">parser</span><span class="p">:</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">            </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Measures_VERSPM_2010,2038_Marea=RVMPO.csv</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">            </span><span class="nt">eval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loc[&#39;UrbanHhCO2e&#39;,&#39;2010&#39;] - loc[&#39;UrbanHhCO2e&#39;,&#39;2038&#39;]</span>
+</span></code></pre></div>
+<p>For more complex parsing and analysis, you can define a custom Python function
+to compute arbitrarily complex performance measures. In the example repository,
+the Oregon VE State model has a <a href="https://github.com/tmip-emat/ve-integration/blob/359232a1a4d562dcb3db03601a3807506a726673/extract_outputs.R#L1">custom parser</a>
+written in R that computes a number of performance measures. This R script is
+called as a subprocess from the <a href="https://github.com/tmip-emat/ve-integration/blob/359232a1a4d562dcb3db03601a3807506a726673/emat_ve_wrapper.py#L957"><code>post_process</code></a>
+method of the <code>FilesCoreModel</code> subclass. The built-in parser described above is
+then used to extract the performance measures from the output of the R
+post-processing script.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.annotate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+        <script src="../assets/_markdown_exec_pyodide.js"></script>
+      
+    
+  </body>
+</html>

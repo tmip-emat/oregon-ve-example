@@ -47,6 +47,8 @@ class VEModel(FilesCoreModel): # (1)!
 1.  The `VEModel` class is a subclass of `FilesCoreModel`, which defines the specific
     steps needed to prepare the input files, run the model, and extract the results.
 
+You can see some examples of the `FilesCoreModel` interface [here](https://github.com/tmip-emat/tmip-emat-ve/blob/1f62205652d26389d1767a2cdb0ba1fabe057dea/emat_verspm.py#L36)
+and [here](https://github.com/tmip-emat/ve-integration/blob/ff9e83fdc5adf4414dd9454dd980d6f32464bf09/emat_ve_wrapper.py#L40).
 
 ## Setting Up an Experiment
 

@@ -328,7 +328,8 @@ def _manipulate_by_mixture(
 
 This method is in turn called from individual `setup` sub-methods, which will
 define the specific input parameters that are mixtures of data tables.  For example,
-the `_manipulate_landuse` method can define the specific input parameters that are
+the [`_manipulate_landuse`](https://github.com/tmip-emat/ve-integration/blob/7b41df9c94b2671ccef0fd214593f3629f8337e3/emat_ve_wrapper.py#L534-L544) 
+method can define the specific input parameters that are
 mixtures of data tables for land use density inputs.
 
 ``` python
@@ -349,7 +350,8 @@ def _manipulate_ludensity(self, params):
     directory where the categorical input files for the mixture bounds are 
     stored.
 
-You will find this function mirrored in the EMAT exploratory scope definition,
+You will find this function mirrored in the EMAT exploratory 
+[scope definition](https://github.com/tmip-emat/ve-integration/blob/7b41df9c94b2671ccef0fd214593f3629f8337e3/EMAT-VE-Configs/odot-otp-scope.yml#L11-L23),
 where the mixture of data tables is defined as an exogenous uncertainty.
 
 ``` yaml
